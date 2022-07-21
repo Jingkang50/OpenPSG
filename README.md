@@ -47,7 +47,7 @@ We believe that the biggest problem of classic scene graph generation (SGG) come
 Classic scene graph generation datasets adopt bounding box-based object grounding, which inevitably causes a number of issues:
 - **Coarse localization**: bounding boxes cannot reach pixel-level accuracy,
 - **Inability to ground comprehensively**: bounding boxes cannot ground backgrounds,
-- **tendency to provide trivial information**: current datasets usually capture objects like `head` to form the trivial relation of `person-has-head`, due to the large freedom of bounding box annotation.
+- **Tendency to provide trivial information**: current datasets usually capture objects like `head` to form the trivial relation of `person-has-head`, due to the large freedom of bounding box annotation.
 - **Duplicate groundings**: the same object could be grounded by multiple separate bounding boxes.
 
 All of the problems above can be easily addressed by PSG dataset, which we ground the objects using panoptic segmentation with appropriate granularity of object categories (adopted from COCO).
@@ -59,9 +59,9 @@ In fact, PSG dataset contains 49k overlapping images from COCO and Visual Genome
 | <b>Comparison between classic VG-150 and PSG.</b>|
 
 ## Clear Predicate Definition
-We also find that a good definition of predicates are unfortunately ignored in the previous SGG datasets.
+We also find that a good definition of predicates is unfortunately ignored in the previous SGG datasets.
 To better formulate PSG task, we carefully define 56 predicates for PSG dataset.
-We try hard to avoid trivial or duplicated relations, and find that 56 predicates are enough to cover the entire PSG dataset (or common everyday scenarios).
+We try hard to avoid trivial or duplicated relations, and find that the designed 56 predicates are enough to cover the entire PSG dataset (or common everyday scenarios).
 
 Type    | Predicates  |
 ---    | ---       |
@@ -210,6 +210,10 @@ PSGFormer | ResNet-50 | 60 | 18.0 / 14.8 | 19.6 / 17.0 | 20.1 / 17.6 |  |
 ## Contributing
 We appreciate all contributions to improve OpenPSG.
 We sincerely welcome community users to participate in these projects. Please refer to [CONTRIBUTING.md](https://github.com/Jingkang50/OpenOOD/blob/v0.5/CONTRIBUTING.md) for the contributing guideline.
+
+## Acknowledgements
+OpenPSG is developed based on [MMDetection](https://github.com/open-mmlab/mmdetection). Most of the two-stage SGG implementations refer to [MMSceneGraph](https://github.com/Kenneth-Wong/MMSceneGraph) and [Scene-Graph-Benchmark.pytorch](https://github.com/KaihuaTang/Scene-Graph-Benchmark.pytorch).
+We sincerely appreciate the efforts of the developers from the previous codebases.
 
 ## Citation
 If you find our repository useful for your research, please consider citing our paper:
