@@ -42,6 +42,37 @@ To promote comprehensive scene understanding, we take account all the content in
 |:--:|
 | <b>PSG Task: For each image, to generate scene graph that grounded by panoptic segmentation</b>|
 
+## Segmentation-based PSG solves many SGG problems
+We think that the biggest problem of SGG comes from the noisy dataset.
+Classic scene graph generation (SGG) datasets adopt bounding box-based object grounding, which inevitably causes a number of issues:
+- **Coarse localization**: bounding boxes cannot reach pixel-level accuracy,
+- **Inability to ground comprehensively**: bounding boxes cannot ground backgrounds,
+- **tendency to provide trivial information**: current datasets usually capture objects like `head` to form the trivial relation of `person-has-head`, due to the large freedom of bounding box annotation.
+- **Duplicate groundings**: the same object could be grounded by multiple separate bounding boxes.
+
+All of the problems above can be easily addressed by PSG dataset, which we ground the objects using panoptic segmentation with appropriate granularity of object categories (adopted from COCO).
+
+In fact, PSG dataset contains 49k overlapping images from COCO and Visual Genome. In the nutshell, we ask annotators to annotate relations based on COCO panoptic segmentation, i.e., relations are mask-to-mask.
+
+| ![psg.jpg](https://live.staticflickr.com/65535/52087916793_23a27ca536_k.jpg) |
+|:--:|
+| <b>Comparison between classic VG-150 and PSG.</b>|
+
+## Clear Predicate Definition
+We also find that a good definition of predicates are unfortunately ignored in the previous SGG datasets.
+To better formulate PSG task, we carefully define 56 predicates for PSG dataset.
+We try hard to avoid trivial or duplicated relations, and find that 56 predicates are enough to cover the entire PSG dataset (or common everyday scenarios).
+
+Type    | Predicates  |
+---    | ---       |
+Positional Relations (6)     | over, in front of, beside, on, in, attached to. |
+Common Object-Object Relations (5) | hanging from, on the back of, falling off, going down, painted on.|
+Common Actions (31) | walking on, running on, crossing, standing on, lying on, sitting on, leaning on, flying over, jumping over, jumping from, wearing, holding, carrying, looking at, guiding, kissing, eating, drinking, feeding, biting, catching, picking (grabbing), playing with, chasing, climbing, cleaning (washing, brushing), playing, touching, pushing, pulling, opening.|
+Human Actions (4)	 | cooking, talking to, throwing (tossing), slicing.
+Actions in Traffic Scene (4) |	driving, riding, parked on, driving on.
+Actions in Sports Scene (3)	| about to hit, kicking, swinging.
+Interaction between Background (3) |	entering, exiting, enclosing (surrounding, warping in)
+
 ## Updates
 - **July 3, 2022**: PSG is accepted by ECCV'22.
 
@@ -159,10 +190,6 @@ python tools/test.py \
 
 - [ ] VG-150 (IJCV'17)
 - [x] PSG (ECCV'22)
-
-| ![psg.jpg](https://live.staticflickr.com/65535/52087916793_23a27ca536_k.jpg) |
-|:--:|
-| <b>Comparison between classic VG-150 and PSG.</b>|
 
 
 ## Model Zoo
