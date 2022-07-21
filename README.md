@@ -3,16 +3,16 @@
   <img src="https://live.staticflickr.com/65535/52193879677_751a4e0b79_k.jpg" align="center" width="60%">
 
   <p align="center">
-  <a href="https://arxiv.org/abs/2202.03377" target='_blank'>
+  <a href="https://arxiv.org/" target='_blank'>
     <img src="https://img.shields.io/badge/Paper-ECCV%202022-b31b1b?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="http://psgdataset.org/" target='_blank'>
+  <a href="https://psgdataset.org/" target='_blank'>
     <img src="https://img.shields.io/badge/Data-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://zhuanlan.zhihu.com/p/529498676" target='_blank'>
-    <img src="https://img.shields.io/badge/Benchmark-5+%20Methods-797ef6?style=flat-square">
+  <a href="https://paperswithcode.com" target='_blank'>
+    <img src="https://img.shields.io/badge/Benchmark-PapersWithCode-797ef6?style=flat-square">
   </a>
 </p>
 
@@ -42,6 +42,96 @@ To promote comprehensive scene understanding, we take account all the content in
 |:--:|
 | <b>PSG Task: For each image, to generate scene graph that grounded by panoptic segmentation</b>|
 
+## Updates
+- **July 3, 2022**: PSG is accepted by ECCV'22.
+
+
+## Get Started
+To setup the environment, we use `conda` to manage our dependencies.
+
+Our developers use `CUDA 10.1` to do experiments.
+
+You can specify the appropriate `cudatoolkit` version to install on your machine in the `environment.yml` file, and then run the following to create the `conda` environment:
+```bash
+conda env create -f environment.yml
+```
+You shall manually install the following dependencies.
+```bash
+# Install mmcv
+## CAUTION: The latest versions of mmcv 1.5.3, mmdet 2.25.0 are not well supported, due to bugs in mmdet.
+pip install mmcv-full==1.4.3 -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.7.0/index.html
+
+# Install mmdet
+pip install openmim
+mim install mmdet=2.20.0
+
+# Install coco panopticapi
+pip install git+https://github.com/cocodataset/panopticapi.git
+
+# For visualization
+conda install -c conda-forge pycocotools
+pip install detectron2==0.5 -f \
+  https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.7/index.html
+
+# If you're using wandb for logging
+pip install wandb
+wandb login
+```
+
+[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=KApssd) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=LWdJ9h) are provided. Please unzip the files if necessary.
+
+Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
+
+```
+├── ...
+├── configs
+├── data
+│   ├── coco
+│   │   ├── annotations
+│   │   └── ...
+│   └── psg
+│       ├── psg.json
+│       ├── tiny_psg.json
+│       └── ...
+├── openpsg
+├── scripts
+├── tools
+├── work_dirs
+│   ├── checkpoints
+│   └── ...
+├── ...
+```
+We suggest our users to play with `./tools/Visualize_Dataset.ipynb` to quickly get familiar with PSG dataset.
+
+To train or test PSG models, please see https://github.com/Jingkang50/OpenPSG/tree/main/scripts for scripts of each method. Some example scripts are below.
+
+**Training**
+```bash
+# Single GPU for two-stage methods, debug mode
+PYTHONPATH='.':$PYTHONPATH \
+python -m pdb -c continue tools/train.py \
+  configs/psg/motif_panoptic_fpn_r50_fpn_1x_sgdet_psg.py
+
+# Multiple GPUs for one-stage methods, running mode
+PYTHONPATH='.':$PYTHONPATH \
+python -m torch.distributed.launch \
+--nproc_per_node=8 --master_port=29500 \
+  tools/train.py \
+  configs/psgformer/psgformer_r50_psg.py \
+  --gpus 8 \
+  --launcher pytorch
+```
+
+**Testing**
+```bash
+# sh scripts/basics/test_panoptic_fpn_coco.sh
+PYTHONPATH='.':$PYTHONPATH \
+python tools/test.py \
+  configs/psg/panoptic_fpn_r50_fpn_1x_psg.py \
+  path/to/checkpoint.pth \
+  --out work_dirs/panoptic_fpn_r50_fpn/result.pkl \
+  --eval PQ
+```
 
 ## OpenPSG: Benchmarking PSG Task
 ### Supported methods
@@ -75,99 +165,19 @@ To promote comprehensive scene understanding, we take account all the content in
 | <b>Comparison between classic VG-150 and PSG.</b>|
 
 
-## Installation
-```bash
-conda env create -f environment.yml
-
-# Install mmcv
-## CAUTION: The latest versions of mmcv 1.5.3, mmdet 2.25.0 are not well supported, due to bugs in mmdet.
-pip install mmcv-full==1.4.3 -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.7.0/index.html
-
-# Install mmdet
-pip install openmim
-mim install mmdet=2.20.0
-
-# Install coco panopticapi
-pip install git+https://github.com/cocodataset/panopticapi.git
-
-# For visualization
-conda install -c conda-forge pycocotools
-pip install detectron2==0.5 -f \
-  https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.7/index.html
-
-# If you're using wandb for logging
-pip install wandb
-wandb login
-```
-
 ## Model Zoo
-Method    | Backbone | #Epoch | R/mR@20 | R/mR@50 | R/mR@100 | PQ | ckpt
----       | ---  | --- | --- | --- |--- |--- |--- |
-IMP       | ResNet-50 | 12 | 283 | 290 | 286 | 289 | 289 |
-MOTIFS    | ResNet-50 | 12 | 283 | 290 | 286 | 289 | 289 |
-VCTree    | ResNet-50 | 12 | 283 | 290 | 286 | 289 | 289 |
-GPSNet    | ResNet-50 | 12 | 283 | 290 | 286 | 289 | 289 |
-PSGTR     | ResNet-50 | 12 | 283 | 290 | 286 | 289 | 289 |
-PSGTR     | ResNet-50 | 60 | 283 | 290 | 286 | 289 | 289 |
-PSGTR     | ResNet-101 | 60 | 283 | 290 | 286 | 289 | 289 |
-PSGFormer | ResNet-50 | 12 | 283 | 290 | 286 | 289 | 289 |
-PSGFormer | ResNet-50 | 60 | 283 | 290 | 286 | 289 | 289 |
-PSGFormer | ResNet-101 | 60 | 283 | 290 | 286 | 289 | 289 |
+Method    | Backbone | #Epoch | R/mR@20 | R/mR@50 | R/mR@100 | ckpt
+---       | ---  | --- | --- | --- |--- |--- |
+IMP       | ResNet-50 | 12 | 16.5 / 6.52 | 18.2 / 7.05 | 18.6 / 7.23 |  |
+MOTIFS    | ResNet-50 | 12 | 20.0 / 9.10 | 21.7 / 9.57 | 22.0 / 9.69 |  |
+VCTree    | ResNet-50 | 12 | 20.6 / 9.70 | 22.1 / 10.2 | 22.5 / 10.2 |  |
+GPSNet    | ResNet-50 | 12 | 17.8 / 7.03 | 19.6 / 7.49 | 20.1 / 7.67 |  |
+PSGTR     | ResNet-50 | 12 | 3.82 / 1.29 | 4.16 / 1.54 | 4.27 / 1.57 |  |
+PSGFormer | ResNet-50 | 12 | 16.8 / 14.5 | 19.2 / 17.4 | 20.2 / 18.7 |  |
+PSGTR     | ResNet-50 | 60 | 28.4 / 16.6 | 34.4 / 20.8 | 36.3 / 22.1 |  |
+PSGFormer | ResNet-50 | 60 | 18.0 / 14.8 | 19.6 / 17.0 | 20.1 / 17.6 |  |
 
 
-## Scripts
-See https://github.com/Jingkang50/OpenPSG/tree/main/scripts for scripts of each method.
-
-**Training**
-```bash
-# Single GPU for two-stage methods, debug mode
-PYTHONPATH='.':$PYTHONPATH \
-python -m pdb -c continue tools/train.py \
-  configs/psg/motif_panoptic_fpn_r50_fpn_1x_sgdet_psg.py
-
-# Multiple GPUs for one-stage methods, running mode
-PYTHONPATH='.':$PYTHONPATH \
-python -m torch.distributed.launch \
---nproc_per_node=8 --master_port=29500 \
-  tools/train.py \
-  configs/psgformer/psgformer_r50_psg.py \
-  --gpus 8 \
-  --launcher pytorch
-```
-
-**Testing**
-```bash
-# sh scripts/basics/test_panoptic_fpn_coco.sh
-PYTHONPATH='.':$PYTHONPATH \
-python tools/test.py \
-  configs/psg/panoptic_fpn_r50_fpn_1x_psg.py \
-  path/to/checkpoint.pth \
-  --out work_dirs/panoptic_fpn_r50_fpn/result.pkl \
-  --eval PQ
-```
-
-**Visualization**
-
-See https://mmdetection.readthedocs.io/en/v2.19.0/useful_tools.html for more tools.
-```bash
-# Visualize detection training dataset
-PYTHONPATH='.':$PYTHONPATH \
-python tools/test.py \
-  configs/motifs/panoptic_fpn_r50_fpn_1x_sgdet_psg.py \
-  work_dirs/motifs_panoptic_fpn_r50_fpn_1x_sgdet_psg/latest.pth \
-  --out work_dirs/motifs_panoptic_fpn_r50_fpn_1x_sgdet_psg/result.pkl \
-  --eval sgdet
-
-# Visualize evaluation results
-PYTHONPATH='.':$PYTHONPATH \
-python tools/vis_results.py \
-  configs/motifs/panoptic_fpn_r50_fpn_1x_sgdet_psg.py \
-  work_dirs/motifs_panoptic_fpn_r50_fpn_1x_sgdet_psg/result.pkl \
-  work_dirs/motifs_panoptic_fpn_r50_fpn_1x_sgdet_psg/analyze_viz \
-  --img_idx 3 \
-  --topk 20 \
-  --show-score-thr 0.3
-```
 
 ---
 ## Contributing

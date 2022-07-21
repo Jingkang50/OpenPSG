@@ -138,7 +138,7 @@ dmypy.json
 # vscode
 .vscode
 
-!tools/visualization.ipynb
+!tools/Visualize_Dataset.ipynb
 
 # not track captioning
 *.json
