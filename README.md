@@ -43,8 +43,8 @@ To promote comprehensive scene understanding, we take account all the content in
 | <b>PSG Task: For each image, to generate scene graph that grounded by panoptic segmentation</b>|
 
 ## Segmentation-based PSG solves many SGG problems
-We think that the biggest problem of SGG comes from the noisy dataset.
-Classic scene graph generation (SGG) datasets adopt bounding box-based object grounding, which inevitably causes a number of issues:
+We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
+Classic scene graph generation datasets adopt bounding box-based object grounding, which inevitably causes a number of issues:
 - **Coarse localization**: bounding boxes cannot reach pixel-level accuracy,
 - **Inability to ground comprehensively**: bounding boxes cannot ground backgrounds,
 - **tendency to provide trivial information**: current datasets usually capture objects like `head` to form the trivial relation of `person-has-head`, due to the large freedom of bounding box annotation.
@@ -165,17 +165,17 @@ python tools/test.py \
 ```
 
 ## OpenPSG: Benchmarking PSG Task
-### Supported methods
+### Supported methods (Welcome to Contribute!)
 
 <details open>
 <summary><b>Two-Stage Methods (6)</b></summary>
 
-> - [x] IMP* (CVPR'17)
-> - [x] MOTIFS* (CVPR'18)
-> - [x] VCTree* (CVPR'19)
-> - [x] GPSNet* (CVPR'20)
-> - [ ] EBSGG* (CVPR'21)
-> - [ ] TopicSG* (ICCV'21)
+> - [x] IMP (CVPR'17)
+> - [x] MOTIFS (CVPR'18)
+> - [x] VCTree (CVPR'19)
+> - [x] GPSNet (CVPR'20)
+> - [ ] EBSGG (CVPR'21)
+> - [ ] TopicSG (ICCV'21)
 </details>
 
 <details open>
