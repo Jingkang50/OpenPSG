@@ -15,8 +15,7 @@
   <a href="https://entuedu-my.sharepoint.com/personal/jingkang001_e_ntu_edu_sg/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjingkang001%5Fe%5Fntu%5Fedu%5Fsg%2FDocuments%2Fopenpsg%2Fdata&ga=1" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
-
-  <p align="center">
+  <br>
   <a href="https://huggingface.co/" target='_blank'>
     <img src="https://img.shields.io/badge/Demo-HuggingFace-ffca37?style=flat-square">
   </a>
@@ -52,7 +51,7 @@ To promote comprehensive scene understanding, we take account all the content in
 
 | ![psg.jpg](https://live.staticflickr.com/65535/52231748332_4945d88929_b.jpg) |
 |:--:|
-| <b>PSG Task: For each image, to generate scene graph that grounded by panoptic segmentation</b>|
+| <b>PSG Task: To generate a scene graph that is grounded by the panoptic segmentation</b>|
 
 ## PSG addresses many SGG problems
 We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
