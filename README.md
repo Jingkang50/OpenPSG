@@ -1,3 +1,4 @@
+# Panoptic Scene Graph Generation
 <br />
 <p align="center">
   <img src="https://live.staticflickr.com/65535/52193879677_751a4e0b79_k.jpg" align="center" width="60%">
@@ -8,13 +9,25 @@
   </a>
   &nbsp;&nbsp;&nbsp;
   <a href="https://psgdataset.org/" target='_blank'>
-    <img src="https://img.shields.io/badge/Data-psgdataset.org-228c22?style=flat-square">
+    <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://entuedu-my.sharepoint.com/personal/jingkang001_e_ntu_edu_sg/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjingkang001%5Fe%5Fntu%5Fedu%5Fsg%2FDocuments%2Fopenpsg%2Fdata&ga=1" target='_blank'>
+    <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
+  </a>
+
+  <p align="center">
+  <a href="https://huggingface.co/" target='_blank'>
+    <img src="https://img.shields.io/badge/Demo-HuggingFace-ffca37?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
   <a href="https://paperswithcode.com" target='_blank'>
-    <img src="https://img.shields.io/badge/Benchmark-PapersWithCode-797ef6?style=flat-square">
+    <img src="https://img.shields.io/badge/Benchmark-PapersWithCode-00c4c6?style=flat-square">
   </a>
+
+
 </p>
+
 
   <p align="center">
   <font size=5><strong>Panoptic Scene Graph Generation</strong></font>
@@ -31,18 +44,17 @@
 </p>
 
 
-
 ---
 ## What is PSG Task?
-We introduce a new task named <strong>Panoptic Scene Graph Generation (PSG)</strong>, which aims to interpret a complex scene image with the scene graph representation, and each node in the scene graph should be grounded by its segmentation mask in the image.
+<strong>The Panoptic Scene Graph Generation (PSG) Task</strong> aims to interpret a complex scene image with a scene graph representation, and each node in the scene graph should be grounded by its pixel-accurate segmentation mask in the image.
 
 To promote comprehensive scene understanding, we take account all the content in the image, including things and stuff, to generate the scene graph.
 
-| ![psg.jpg](https://live.staticflickr.com/65535/52193735035_940fe9479c_b.jpg) |
+| ![psg.jpg](https://live.staticflickr.com/65535/52231748332_4945d88929_b.jpg) |
 |:--:|
 | <b>PSG Task: For each image, to generate scene graph that grounded by panoptic segmentation</b>|
 
-## Segmentation-based PSG solves many SGG problems
+## PSG addresses many SGG problems
 We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
 Classic scene graph generation datasets adopt bounding box-based object grounding, which inevitably causes a number of issues:
 - **Coarse localization**: bounding boxes cannot reach pixel-level accuracy,
@@ -54,7 +66,7 @@ All of the problems above can be easily addressed by PSG dataset, which we groun
 
 In fact, PSG dataset contains 49k overlapping images from COCO and Visual Genome. In the nutshell, we ask annotators to annotate relations based on COCO panoptic segmentation, i.e., relations are mask-to-mask.
 
-| ![psg.jpg](https://live.staticflickr.com/65535/52087916793_23a27ca536_k.jpg) |
+| ![psg.jpg](https://live.staticflickr.com/65535/52231743087_2bda038ee2_b.jpg) |
 |:--:|
 | <b>Comparison between classic VG-150 and PSG.</b>|
 
@@ -74,6 +86,7 @@ Actions in Sports Scene (3)	| about to hit, kicking, swinging.
 Interaction between Background (3) |	entering, exiting, enclosing (surrounding, warping in)
 
 ## Updates
+- **July 22, 2022**: We submit the paper to arXiv and will appear on July 25.
 - **July 3, 2022**: PSG is accepted by ECCV'22.
 
 
@@ -109,7 +122,7 @@ pip install wandb
 wandb login
 ```
 
-[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=KApssd) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=LWdJ9h) are provided. Please unzip the files if necessary.
+[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=KApssd) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
 
 Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
 
@@ -129,6 +142,7 @@ Our codebase accesses the datasets from `./data/` and pretrained models from `./
 ├── tools
 ├── work_dirs
 │   ├── checkpoints
+│   ├── psgtr_r50
 │   └── ...
 ├── ...
 ```
@@ -195,14 +209,12 @@ python tools/test.py \
 ## Model Zoo
 Method    | Backbone | #Epoch | R/mR@20 | R/mR@50 | R/mR@100 | ckpt
 ---       | ---  | --- | --- | --- |--- |--- |
-IMP       | ResNet-50 | 12 | 16.5 / 6.52 | 18.2 / 7.05 | 18.6 / 7.23 |  |
-MOTIFS    | ResNet-50 | 12 | 20.0 / 9.10 | 21.7 / 9.57 | 22.0 / 9.69 |  |
-VCTree    | ResNet-50 | 12 | 20.6 / 9.70 | 22.1 / 10.2 | 22.5 / 10.2 |  |
-GPSNet    | ResNet-50 | 12 | 17.8 / 7.03 | 19.6 / 7.49 | 20.1 / 7.67 |  |
-PSGTR     | ResNet-50 | 12 | 3.82 / 1.29 | 4.16 / 1.54 | 4.27 / 1.57 |  |
-PSGFormer | ResNet-50 | 12 | 16.8 / 14.5 | 19.2 / 17.4 | 20.2 / 18.7 |  |
-PSGTR     | ResNet-50 | 60 | 28.4 / 16.6 | 34.4 / 20.8 | 36.3 / 22.1 |  |
-PSGFormer | ResNet-50 | 60 | 18.0 / 14.8 | 19.6 / 17.0 | 20.1 / 17.6 |  |
+IMP       | ResNet-50 | 12 | 16.5 / 6.52 | 18.2 / 7.05 | 18.6 / 7.23 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EiTgJ9q2h3hDpyXSdu6BtlQBHAZNwNaYmcO7SElxhkIFXw?e=8fytHc) |
+MOTIFS    | ResNet-50 | 12 | 20.0 / 9.10 | 21.7 / 9.57 | 22.0 / 9.69 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Eh4hvXIspUFKpNa_75qwDoEBJTCIozTLzm49Ste6HaoPow?e=ZdAs6z) |
+VCTree    | ResNet-50 | 12 | 20.6 / 9.70 | 22.1 / 10.2 | 22.5 / 10.2 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EhKfi9kqAd9CnSoHztQIChABeBjBD3hF7DflrNCjlHfh9A?e=lWa1bd) |
+GPSNet    | ResNet-50 | 12 | 17.8 / 7.03 | 19.6 / 7.49 | 20.1 / 7.67 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EipIhZgVgx1LuK2RUmjRg2sB8JqxMIS5GnPDHeaYy5GF6A?e=5j53VF) |
+PSGTR     | ResNet-50 | 60 | 28.4 / 16.6 | 34.4 / 20.8 | 36.3 / 22.1 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Eonc-KwOxg9EmdtGDX6ss-gB35QpKDnN_1KSWOj6U8sZwQ?e=zdqwqP) |
+PSGFormer | ResNet-50 | 60 | 18.0 / 14.8 | 19.6 / 17.0 | 20.1 / 17.6 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EnaJchJzJPtGrkl4k09evPIB5JUkkDZ2tSS9F-Hd-1KYzA?e=9QA8Nc) |
 
 
 
