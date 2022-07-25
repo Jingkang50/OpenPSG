@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://entuedu-my.sharepoint.com/personal/jingkang001_e_ntu_edu_sg/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjingkang001%5Fe%5Fntu%5Fedu%5Fsg%2FDocuments%2Fopenpsg%2Fdata&ga=1" target='_blank'>
+  <a href="https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=BLFFyb" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   <br>
@@ -20,8 +20,12 @@
     <img src="https://img.shields.io/badge/Demo-HuggingFace-ffca37?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://paperswithcode.com" target='_blank'>
+  <a href="https://paperswithcode.com/task/panoptic-scene-graph-generation/" target='_blank'>
     <img src="https://img.shields.io/badge/Benchmark-PapersWithCode-00c4c6?style=flat-square">
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw" target='_blank'>
+    <img src="https://img.shields.io/badge/Forum-Slack-4c1448?style=flat-square">
   </a>
 
 
@@ -52,6 +56,12 @@ To promote comprehensive scene understanding, we take account all the content in
 | ![psg.jpg](https://live.staticflickr.com/65535/52231748332_4945d88929_b.jpg) |
 |:--:|
 | <b>PSG Task: To generate a scene graph that is grounded by the panoptic segmentation</b>|
+
+## Demo of the Current SOTA PSGTR
+
+<p align="center">
+  <img src="https://psgdataset.org/res/psgtr_long.gif" align="center" width="60%">
+
 
 ## PSG addresses many SGG problems
 We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
@@ -85,7 +95,7 @@ Actions in Sports Scene (3)	| about to hit, kicking, swinging.
 Interaction between Background (3) |	entering, exiting, enclosing (surrounding, warping in)
 
 ## Updates
-- **July 22, 2022**: We submit the paper to arXiv and will appear on July 25.
+- **July 25, 2022**: PSG paper is available on arXiv.
 - **July 3, 2022**: PSG is accepted by ECCV'22.
 
 
@@ -121,7 +131,7 @@ pip install wandb
 wandb login
 ```
 
-[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=KApssd) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=BLFFyb) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
 
 Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
 
@@ -174,7 +184,7 @@ python tools/test.py \
   configs/psg/panoptic_fpn_r50_fpn_1x_psg.py \
   path/to/checkpoint.pth \
   --out work_dirs/panoptic_fpn_r50_fpn/result.pkl \
-  --eval PQ
+  --eval sgdet
 ```
 
 ## OpenPSG: Benchmarking PSG Task
@@ -211,11 +221,8 @@ Method    | Backbone | #Epoch | R/mR@20 | R/mR@50 | R/mR@100 | ckpt
 IMP       | ResNet-50 | 12 | 16.5 / 6.52 | 18.2 / 7.05 | 18.6 / 7.23 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EiTgJ9q2h3hDpyXSdu6BtlQBHAZNwNaYmcO7SElxhkIFXw?e=8fytHc) |
 MOTIFS    | ResNet-50 | 12 | 20.0 / 9.10 | 21.7 / 9.57 | 22.0 / 9.69 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Eh4hvXIspUFKpNa_75qwDoEBJTCIozTLzm49Ste6HaoPow?e=ZdAs6z) |
 VCTree    | ResNet-50 | 12 | 20.6 / 9.70 | 22.1 / 10.2 | 22.5 / 10.2 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EhKfi9kqAd9CnSoHztQIChABeBjBD3hF7DflrNCjlHfh9A?e=lWa1bd) |
-GPSNet    | ResNet-50 | 12 | 17.8 / 7.03 | 19.6 / 7.49 | 20.1 / 7.67 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EipIhZgVgx1LuK2RUmjRg2sB8JqxMIS5GnPDHeaYy5GF6A?e=5j53VF) |
 PSGTR     | ResNet-50 | 60 | 28.4 / 16.6 | 34.4 / 20.8 | 36.3 / 22.1 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Eonc-KwOxg9EmdtGDX6ss-gB35QpKDnN_1KSWOj6U8sZwQ?e=zdqwqP) |
 PSGFormer | ResNet-50 | 60 | 18.0 / 14.8 | 19.6 / 17.0 | 20.1 / 17.6 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EnaJchJzJPtGrkl4k09evPIB5JUkkDZ2tSS9F-Hd-1KYzA?e=9QA8Nc) |
-
-
 
 ---
 ## Contributing
