@@ -4,7 +4,7 @@
   <img src="https://live.staticflickr.com/65535/52193879677_751a4e0b79_k.jpg" align="center" width="60%">
 
   <p align="center">
-  <a href="https://arxiv.org/" target='_blank'>
+  <a href="https://arxiv.org/abs/2207.11247" target='_blank'>
     <img src="https://img.shields.io/badge/Paper-ECCV%202022-b31b1b?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
@@ -48,6 +48,11 @@
 
 
 ---
+
+## Updates
+- **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join in our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to keep updated!
+- **July 25, 2022**: PSG paper is available on [arXiv](https://arxiv.org/abs/2207.11247).
+- **July 3, 2022**: PSG is accepted by ECCV'22.
 ## What is PSG Task?
 <strong>The Panoptic Scene Graph Generation (PSG) Task</strong> aims to interpret a complex scene image with a scene graph representation, and each node in the scene graph should be grounded by its pixel-accurate segmentation mask in the image.
 
@@ -93,10 +98,6 @@ Human Actions (4)	 | cooking, talking to, throwing (tossing), slicing.
 Actions in Traffic Scene (4) |	driving, riding, parked on, driving on.
 Actions in Sports Scene (3)	| about to hit, kicking, swinging.
 Interaction between Background (3) |	entering, exiting, enclosing (surrounding, warping in)
-
-## Updates
-- **July 25, 2022**: PSG paper is available on arXiv.
-- **July 3, 2022**: PSG is accepted by ECCV'22.
 
 
 ## Get Started
