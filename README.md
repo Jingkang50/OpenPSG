@@ -1,7 +1,9 @@
 # Panoptic Scene Graph Generation
-<br />
+<!-- <br /> -->
+<!-- <p align="center">
+  <img src="https://live.staticflickr.com/65535/52193879677_751a4e0b79_k.jpg" align="center" width="60%"> -->
 <p align="center">
-  <img src="https://live.staticflickr.com/65535/52193879677_751a4e0b79_k.jpg" align="center" width="60%">
+  <img src="./assets/psgtr_long.gif" align="center" width="80%">
 
   <p align="center">
   <a href="https://arxiv.org/abs/2207.11247" target='_blank'>
@@ -62,10 +64,8 @@ To promote comprehensive scene understanding, we take account all the content in
 |:--:|
 | <b>PSG Task: To generate a scene graph that is grounded by the panoptic segmentation</b>|
 
-## Demo of the Current SOTA PSGTR
+<!-- ## Demo of the Current SOTA PSGTR -->
 
-<p align="center">
-  <img src="./assets/psgtr_long.gif" align="center" width="80%">
 
 ## PSG addresses many SGG problems
 We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
