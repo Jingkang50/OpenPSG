@@ -65,8 +65,7 @@ To promote comprehensive scene understanding, we take account all the content in
 ## Demo of the Current SOTA PSGTR
 
 <p align="center">
-  <img src="https://psgdataset.org/res/psgtr_long.gif" align="center" width="60%">
-
+  <img src="./assets/psgtr_long.gif" align="center" width="80%">
 
 ## PSG addresses many SGG problems
 We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
