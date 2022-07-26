@@ -15,7 +15,7 @@ from openpsg.utils import adjust_text_color, draw_text, get_colormap
 
 def triplet2Result(triplets, use_mask, eval_mask_rels=False):
     if use_mask:
-        bboxes, labels, rel_pairs, masks, pan_seg, r_scores, r_labels, r_dists \
+        bboxes, labels, rel_pairs, masks, pan_rel_pairs, pan_seg, r_scores, r_labels, r_dists \
             = triplets
         if isinstance(bboxes, torch.Tensor):
             labels = labels.detach().cpu().numpy()
@@ -26,11 +26,12 @@ def triplet2Result(triplets, use_mask, eval_mask_rels=False):
             r_dists = r_dists.detach().cpu().numpy()
         if isinstance(pan_seg, torch.Tensor):
             pan_seg = pan_seg.detach().cpu().numpy()
+            pan_rel_pairs = pan_rel_pairs.detach().cpu().numpy()
             masks = masks.detach().cpu().numpy()
         return Result(refine_bboxes=bboxes,
                       labels=labels,
                       formatted_masks=dict(pan_results=pan_seg),
-                      rel_pair_idxes=rel_pairs,
+                      rel_pair_idxes=pan_rel_pairs,# elif not pan: rel_pairs,
                       rel_dists=r_dists,
                       rel_labels=r_labels,
                       pan_results=pan_seg,
