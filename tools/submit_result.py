@@ -79,10 +79,17 @@ def load_results(filename):
             masks.append(seg_map == s['id'])
 
         rel_array = np.asarray(single_result_dict['relations'])
-        # rel_dists = np.zeros(num_obj*(num_obj-1), 57)
-        # for rel in rel_array:
-        #     sub, obj = rel[:2]
-        #     rel_dists[, rel[2]] = 1
+        rel_dists = np.zeros((num_obj*(num_obj-1), 57))
+
+        crt = 0
+        for sub in range(num_obj):
+            for obj in range(num_obj):
+                for rel in rel_array:
+                    rel_sub, rel_obj, predicate = rel
+                    if rel_sub == sub and rel_obj == obj:
+                        rel_dists[crt, predicate] += 1
+                if sub != obj:
+                    crt+=1
 
         result = Result(
             rels=rel_array,
@@ -90,6 +97,7 @@ def load_results(filename):
             img_shape=(single_result_dict['height'], single_result_dict['width'], 3),
             masks=masks,
             labels=labels,
+            rel_dists=rel_dists,
         )
         results.append(result)
     
