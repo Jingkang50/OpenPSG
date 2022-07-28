@@ -951,6 +951,10 @@ class PSGTrHead(AnchorFreeHead):
             -1, self.num_relations +
             1)[triplet_index]  #### NOTE: to match the evaluation in vg
 
+        complete_r_scores = r_scores
+        complete_r_labels = r_labels
+        complete_r_dists = r_dists
+
         labels = torch.cat((s_labels, o_labels), 0)
         complete_labels = labels
         scores = torch.cat((s_scores, o_scores), 0)
@@ -1113,9 +1117,10 @@ class PSGTrHead(AnchorFreeHead):
                                  dtype=torch.int).reshape(2, -1).T
 
         if self.use_mask:
-            return det_bboxes, complete_labels, rel_pairs, output_masks, pan_rel_pairs, pan_img, r_scores, r_labels, r_dists
+            return det_bboxes, complete_labels, rel_pairs, output_masks, pan_rel_pairs, \
+                pan_img, complete_r_labels, complete_r_dists, r_labels, r_dists
         else:
-            return det_bboxes, labels, rel_pairs, r_scores, r_labels, r_dists
+            return det_bboxes, labels, rel_pairs, r_labels, r_dists
 
     def simple_test_bboxes(self, feats, img_metas, rescale=False):
         
