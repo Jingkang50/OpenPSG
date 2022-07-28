@@ -17,6 +17,7 @@ from mmdet.datasets import build_dataloader, replace_ImageToTensor
 from mmdet.models import build_detector
 
 from openpsg.datasets import build_dataset
+from submit_result import load_results, save_results
 
 
 def parse_args():
@@ -205,6 +206,8 @@ def main():
         outputs = multi_gpu_test(model, data_loader, args.tmpdir,
                                  args.gpu_collect)
 
+    save_results(outputs)
+
     rank, _ = get_dist_info()
     if rank == 0:
         if args.out:
@@ -214,6 +217,8 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
+            outputs = load_results('submission/submission_result.json')
+
             eval_kwargs = cfg.get('evaluation', {}).copy()
             # hard-code way to remove EvalHook args
             for key in [
