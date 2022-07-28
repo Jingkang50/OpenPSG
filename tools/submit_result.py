@@ -1,3 +1,4 @@
+from PIL import Image
 import numpy as np
 import random
 import json
@@ -17,18 +18,8 @@ def save_results(results):
         masks = result.masks
         height, width, channel = result.img_shape #done
 
-        img = np.full(masks.shape[1:3], 0)
-        for i in range(masks.shape[0]):
-            r,g,b = random.choices(range(0,255), k=3)
-            coloring_mask = 1 * np.vstack([[masks[i]]]*3)
-            for j, color in enumerate([r,g,b]):
-                coloring_mask[j,:,:] = coloring_mask[j,:,:] * color
-            img = img + coloring_mask
-        
-        image_path = 'submission/images/%d.png'%idx
-        PIL.Image.fromarray(np.array(img).astype(np.uint8).transpose(1,2,0)).save(image_path)
-
         segments_info = []
+        img = np.full(masks.shape[1:3], 0)
         for i, (label, mask) in enumerate(zip(labels, masks)):
             r,g,b = random.choices(range(0,255), k=3)
             coloring_mask = 1 * np.vstack([[masks[i]]]*3)
@@ -36,11 +27,18 @@ def save_results(results):
                 coloring_mask[j,:,:] = coloring_mask[j,:,:] * color
             img = img + coloring_mask
 
+            print(r, g, b)
+
             segment = dict(
-                category_id=label,
+                category_id=int(label),
                 id=rgb2id((r,g,b))
             )
             segments_info.append(segment)
+
+        image_path = 'submission/images/%d.png'%idx
+        image_array = np.uint8(img).transpose((2,1,0))
+        image = PIL.Image.fromarray(image_array)
+        image.save(image_path)
 
         single_result_dict = dict(
             relations=rels.astype(np.int32).tolist(),
@@ -63,7 +61,8 @@ def load_results(filename):
     results=[]
     for single_result_dict in all_img_dicts:
         pan_seg_filename = single_result_dict['pan_seg_file_name']
-        pan_seg_img = read_image(pan_seg_filename,format='RGB')
+        # pan_seg_img = read_image(pan_seg_filename, format='RGB')
+        pan_seg_img = np.array(Image.open(pan_seg_filename)).transpose((1, 0, 2))
         pan_seg_img = pan_seg_img.copy()  # (H, W, 3)
         seg_map = rgb2id(pan_seg_img)
 
@@ -96,8 +95,9 @@ def load_results(filename):
             rel_pair_idxes=rel_array[:, :2],
             img_shape=(single_result_dict['height'], single_result_dict['width'], 3),
             masks=masks,
-            labels=labels,
+            labels=np.asarray(labels),
             rel_dists=rel_dists,
+            refine_bboxes=np.ones((num_obj, 5)),
         )
         results.append(result)
     
