@@ -47,7 +47,7 @@ def main():
     eval_kwargs = evaluation2
     metric = dataset.evaluate(outputs, **eval_kwargs)
     output_filename = os.path.join(args.output_dir, 'scores.txt')
-    with open(output_filename, 'w') as f3:
+    with open(output_filename, 'w+') as f3:
         f3.write('PQ: {}\n'.format(metric['PQ']))
         f3.write('Final Score: {}\n'.format(metric['sgdet_recall_R_20'] * 0.3 + metric['sgdet_mean_recall_mR_20'] * 0.6 + 0.1 * metric['PQ']))
 
