@@ -94,7 +94,7 @@ class PanopticSceneGraphDataset(CocoPanopticDataset):
                 if d['image_id'] in dataset['test_image_ids']
             ]
         # import pdb; pdb.set_trace();
-        self.data = self.data[:1]
+        self.data = self.data[:10]
         # Init image infos
         self.data_infos = []
         for d in self.data:

@@ -170,7 +170,7 @@ class SGRecall(SceneGraphEvaluation):
             pred_det_results = pred_boxes
         if self.detection_method == 'pan_seg':
             pred_det_results = pred_masks
-        pred_triplets, pred_triplet_det_results, pred_triplet_scores = \
+        pred_triplets, pred_triplet_det_results, _ = \
             self.generate_triplet(
             pred_rels, pred_classes, pred_det_results, pred_scores, obj_scores)
 
