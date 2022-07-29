@@ -94,7 +94,7 @@ class PanopticSceneGraphDataset(CocoPanopticDataset):
                 if d['image_id'] in dataset['test_image_ids']
             ]
         # import pdb; pdb.set_trace();
-        self.data = self.data[:10]
+        self.data = self.data[:1]
         # Init image infos
         self.data_infos = []
         for d in self.data:
@@ -364,9 +364,6 @@ class PanopticSceneGraphDataset(CocoPanopticDataset):
                     gt_img = gt_img.copy()  # (H, W, 3)
 
                     seg_map = rgb2id(gt_img)
-                    # print('\nSegments IDs: ', np.unique(seg_map))
-                    # print('\n', segment_info)
-                    # print(self.CLASSES)
 
                     # get separate masks
                     gt_masks = []
@@ -376,8 +373,6 @@ class PanopticSceneGraphDataset(CocoPanopticDataset):
                         labels_coco.append(label)
                         gt_masks.append(seg_map == s['id'])
                     # load gt pan seg masks done
-                    # labels_coco.sort()
-                    # print('\ngt_labels: ', labels_coco)
 
                     gt_results.append(
                         Result(

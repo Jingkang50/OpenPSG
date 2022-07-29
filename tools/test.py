@@ -218,6 +218,7 @@ def main():
             dataset.format_results(outputs, **kwargs)
         if args.eval:
             outputs = load_results('submission/submission_result.json')
+            # outputs = load_results('data/psg/play.json')
 
             eval_kwargs = cfg.get('evaluation', {}).copy()
             # hard-code way to remove EvalHook args
