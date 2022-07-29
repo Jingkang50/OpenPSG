@@ -4,7 +4,6 @@ import random
 import json
 import PIL
 from openpsg.models.relation_heads.approaches import Result
-from detectron2.data.detection_utils import read_image
 from panopticapi.utils import rgb2id
 
 def save_results(results):
@@ -19,9 +18,9 @@ def save_results(results):
 
         segments_info = []
         img = np.full(masks.shape[1:3], 0)
-        for i, (label, mask) in enumerate(zip(labels, masks)):
+        for label, mask in zip(labels, masks):
             r,g,b = random.choices(range(0,255), k=3)
-            coloring_mask = 1 * np.vstack([[masks[i]]]*3)
+            coloring_mask = 1 * np.vstack([[mask]]*3)
             for j, color in enumerate([r,g,b]):
                 coloring_mask[j,:,:] = coloring_mask[j,:,:] * color
             img = img + coloring_mask
