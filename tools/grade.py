@@ -37,7 +37,7 @@ def save_results(results):
             )
             segments_info.append(segment)
 
-        image_path = 'submission/images/%d.png'%idx
+        image_path = 'submission/panseg/%d.png'%idx
         # image_array = np.uint8(img).transpose((2,1,0))
         image_array = np.uint8(img).transpose((1,2,0))
         PIL.Image.fromarray(image_array).save(image_path)
@@ -61,7 +61,6 @@ def load_results(filename):
     results=[]
     for single_result_dict in all_img_dicts:
         pan_seg_filename = single_result_dict['pan_seg_file_name']
-        # pan_seg_img = np.array(Image.open(pan_seg_filename)).transpose((1, 0, 2))
         pan_seg_img = np.array(Image.open(pan_seg_filename))
         pan_seg_img = pan_seg_img.copy()  # (H, W, 3)
         seg_map = rgb2id(pan_seg_img)
