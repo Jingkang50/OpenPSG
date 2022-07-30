@@ -17,7 +17,7 @@ from mmdet.datasets import build_dataloader, replace_ImageToTensor
 from mmdet.models import build_detector
 
 from openpsg.datasets import build_dataset
-from submit_result import load_results, save_results
+from grade import save_results
 
 
 def parse_args():
@@ -87,6 +87,7 @@ def parse_args():
                         choices=['none', 'pytorch', 'slurm', 'mpi'],
                         default='none',
                         help='job launcher')
+    parser.add_argument('--save_grading_output', action='store_false', help='save output to a json file and save the panoptic mask as a png image into a folder for grading purpose')
     parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
@@ -205,8 +206,8 @@ def main():
             broadcast_buffers=False)
         outputs = multi_gpu_test(model, data_loader, args.tmpdir,
                                  args.gpu_collect)
-
-    save_results(outputs)
+    if args.save_grading_output:
+        save_results(outputs)
 
     rank, _ = get_dist_info()
     if rank == 0:
@@ -217,9 +218,6 @@ def main():
         if args.format_only:
             dataset.format_results(outputs, **kwargs)
         if args.eval:
-            outputs = load_results('submission/submission_result.json')
-            # outputs = load_results('data/psg/play.json')
-
             eval_kwargs = cfg.get('evaluation', {}).copy()
             # hard-code way to remove EvalHook args
             for key in [

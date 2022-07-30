@@ -1,7 +1,13 @@
-from PIL import Image
-import numpy as np
+# Copyright (c) OpenMMLab. All rights reserved.
+import argparse
+import os
 import random
 import json
+
+from mmcv import Config
+from openpsg.datasets import build_dataset
+from PIL import Image
+import numpy as np
 import PIL
 from openpsg.models.relation_heads.approaches import Result
 from panopticapi.utils import rgb2id
@@ -90,3 +96,48 @@ def load_results(filename):
     
     return results
 
+
+evaluation1 = dict(metric=['sgdet'],
+                  relation_mode=True,
+                  classwise=True,
+                  iou_thrs=0.5,
+                  detection_method='pan_seg')
+
+evaluation2 = dict(metric=['PQ'],
+                  relation_mode=True,
+                  classwise=True,
+                  iou_thrs=0.5,
+                  detection_method='pan_seg')
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='MMDet eval a model')
+    parser.add_argument('config', help='config file path') # configs/_base_/datasets/psg.py
+    parser.add_argument('input_path', help='input file path')
+    parser.add_argument('output_path', help='output file path')
+    
+    args = parser.parse_args()
+    return args
+
+
+def main():
+    args = parse_args()
+    cfg = Config.fromfile(args.config)
+
+    dataset = build_dataset(cfg.data.test)
+    outputs = load_results(args.input_path)
+    metric1 = dataset.evaluate(outputs, **evaluation1)
+    metric2 = dataset.evaluate(outputs, **evaluation2)
+    
+    output_filename = os.path.join(args.output_dir, 'scores.txt')
+    
+    with open(output_filename, 'w') as f3:
+        f3.write('Recall R 20: {}\n'.format(metric1['sgdet_recall_R_20']))
+        f3.write('MeanRecall R 20: {}\n'.format(metric1['sgdet_mean_recall_mR_20']))
+        f3.write('PQ: {}\n'.format(metric2['PQ']))
+        f3.write('Final Score: {}\n'.format(metric1['sgdet_recall_R_20'] * 0.3 + metric1['sgdet_mean_recall_mR_20'] * 0.6 + 0.1 * metric2['PQ']))
+
+
+if __name__ == '__main__':
+    main()
