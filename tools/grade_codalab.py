@@ -38,13 +38,14 @@ def save_results(results):
             segments_info.append(segment)
 
         image_path = 'submission/panseg/%d.png' % idx
+        # image_array = np.uint8(img).transpose((2,1,0))
         image_array = np.uint8(img).transpose((1, 2, 0))
         PIL.Image.fromarray(image_array).save(image_path)
 
         single_result_dict = dict(
             relations=rels.astype(np.int32).tolist(),
             segments_info=segments_info,
-            pan_seg_file_name='%d.png' % idx,
+            pan_seg_file_name=image_path,
         )
 
         all_img_dicts.append(single_result_dict)
@@ -118,7 +119,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cfg = Config.fromfile('configs/_base_/datasets/psg_val.py')
+    cfg = Config.fromfile('configs/_base_/datasets/psg_val_codalab.py')
 
     dataset = build_dataset(cfg.data.test)
     outputs = load_results(args.input_path)
