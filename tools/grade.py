@@ -27,18 +27,7 @@ def save_results(results):
 
         segments_info = []
         img = np.full(masks.shape[1:3], 0)
-        for label, mask in zip(labels, masks):
-            r, g, b = random.choices(range(0, 255), k=3)
-            coloring_mask = 1 * np.vstack([[mask]] * 3)
-            for j, color in enumerate([r, g, b]):
-                coloring_mask[j, :, :] = coloring_mask[j, :, :] * color
-            img = img + coloring_mask
-
-            segment = dict(category_id=int(label), id=rgb2id((r, g, b)))
-            segments_info.append(segment)
-
         count = dict()
-        segments_info = []
         for label, mask in zip(labels, masks):
             if label not in count.keys():
                 count[label] = 0
@@ -46,7 +35,7 @@ def save_results(results):
             count[label] += 1
             segment = dict(
                 category_id=int(label),
-                id=id)
+                id=int(id),)
             segments_info.append(segment)
             r, g, b = id2rgb(id)
             coloring_mask = 1 * np.vstack([[mask]] * 3)
@@ -91,17 +80,7 @@ def load_results(loadpath):
         for _, s in enumerate(segments_info):
             label = s['category_id']
             labels.append(label)  #TODO:1-index for gt?
-            masks.append(seg_map == s['id'])
-
-        count = dict()
-        pan_result = seg_map.copy()
-        for _, s in enumerate(segments_info):
-            label = int(s['category_id'])
-            if label not in count.keys():
-                count[label] = 0
-            pan_result[seg_map == s['id']] = label - 1 + count[
-                label] * INSTANCE_OFFSET  #change index?
-            count[label] += 1
+            masks.append(seg_map == int(s['id']))
 
         rel_array = np.asarray(single_result_dict['relations'])
         if len(rel_array) > 20:
@@ -117,7 +96,7 @@ def load_results(loadpath):
             labels=np.asarray(labels),
             rel_dists=rel_dists,
             refine_bboxes=np.ones((num_obj, 5)),
-            pan_results=pan_result,
+            pan_results=seg_map,
         )
         results.append(result)
 
