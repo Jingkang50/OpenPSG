@@ -51,7 +51,7 @@ def save_results(results):
 
         all_img_dicts.append(single_result_dict)
 
-    with open('submission/submission_result.json', 'w') as outfile:
+    with open('submission/relation.json', 'w') as outfile:
         json.dump(all_img_dicts, outfile, default=str)
 
 
