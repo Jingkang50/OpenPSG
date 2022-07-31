@@ -119,7 +119,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cfg = Config.fromfile('configs/_base_/datasets/psg_val.py')
+    cfg = Config.fromfile('configs/_base_/datasets/psg_val_codalab.py')
 
     dataset = build_dataset(cfg.data.test)
     outputs = load_results(args.input_path)
