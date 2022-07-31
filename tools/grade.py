@@ -8,11 +8,32 @@ import numpy as np
 import PIL
 from mmcv import Config
 from mmdet.datasets.coco_panoptic import INSTANCE_OFFSET
-from panopticapi.utils import rgb2id, id2rgb
 from PIL import Image
 
 from openpsg.datasets import build_dataset
 from openpsg.models.relation_heads.approaches import Result
+
+SEED = 321
+encoding_color = dict()
+decoding_color = dict()
+for color2, color1 in enumerate(random.Random(SEED).sample(range(256), 256)):
+    encoding_color[color2] = color1
+    decoding_color[color1] = color2
+
+def rgb2id(color):
+    for i in range(color.shape[0]):
+        for j in range(color.shape[1]):
+            for k in range(3):
+                color[i, j, k] = decoding_color[color[i, j, k]]
+    return color[:, :, 0] + 256 * color[:, :, 1] + 256 * 256 * color[:, :, 2]
+
+
+def id2rgb(id_map):
+    color = []
+    for _ in range(3):
+        color.append(encoding_color[id_map % 256])
+        id_map //= 256
+    return color
 
 
 def save_results(results):
@@ -42,7 +63,8 @@ def save_results(results):
             for j, color in enumerate([r, g, b]):
                 coloring_mask[j, :, :] = coloring_mask[j, :, :] * color
             img = img + coloring_mask
-
+        if not os.path.exists('submission/panseg/'):
+            os.makedirs('submission/panseg/')
         image_path = 'submission/panseg/%d.png' % idx
         image_array = np.uint8(img).transpose((1, 2, 0))
         PIL.Image.fromarray(image_array).save(image_path)
@@ -123,7 +145,7 @@ def main():
 
     output_filename = os.path.join(args.output_path, 'scores.txt')
 
-    with open(output_filename, 'w') as f3:
+    with open(output_filename, 'w+') as f3:
         f3.write('Recall R 20: {}\n'.format(metric1['sgdet_recall_R_20']))
         f3.write('MeanRecall R 20: {}\n'.format(
             metric1['sgdet_mean_recall_mR_20']))
