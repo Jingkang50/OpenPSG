@@ -39,7 +39,6 @@ def save_results(results):
             segments_info.append(segment)
 
         image_path = 'submission/panseg/%d.png'%idx
-        # image_array = np.uint8(img).transpose((2,1,0))
         image_array = np.uint8(img).transpose((1,2,0))
         PIL.Image.fromarray(image_array).save(image_path)
 
@@ -109,7 +108,6 @@ def load_results(filename):
 def parse_args():
     parser = argparse.ArgumentParser(
         description='MMDet eval a model')
-    parser.add_argument('config', help='config file path') # configs/_base_/datasets/psg_val.py
     parser.add_argument('input_path', help='input file path')
     parser.add_argument('output_path', help='output file path')
     
@@ -119,7 +117,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    cfg = Config.fromfile(args.config)
+    cfg = Config.fromfile('configs/_base_/datasets/psg_val.py')
 
     dataset = build_dataset(cfg.data.test)
     outputs = load_results(args.input_path)
