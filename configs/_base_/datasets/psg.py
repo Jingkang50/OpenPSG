@@ -1,7 +1,7 @@
 # dataset settings
 dataset_type = 'PanopticSceneGraphDataset'
-ann_file = './data/psg/psg.json'
-coco_root = 'data/coco'
+ann_file = './data_val/psg/psg.json'
+coco_root = 'data_val/coco'
 
 img_norm_cfg = dict(mean=[123.675, 116.28, 103.53],
                     std=[58.395, 57.12, 57.375],

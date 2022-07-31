@@ -38,9 +38,9 @@ def save_results(results):
             )
             segments_info.append(segment)
 
-        image_path = 'submission/panseg/%d.png'%idx
+        image_path = 'panseg/%d.png'%idx
         image_array = np.uint8(img).transpose((1,2,0))
-        PIL.Image.fromarray(image_array).save(image_path)
+        PIL.Image.fromarray(image_array).save('submission/'+image_path)
 
         single_result_dict = dict(
             relations=rels.astype(np.int32).tolist(),
