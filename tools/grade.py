@@ -11,6 +11,7 @@ import numpy as np
 import PIL
 from openpsg.models.relation_heads.approaches import Result
 from panopticapi.utils import rgb2id
+from mmdet.datasets.coco_panoptic import INSTANCE_OFFSET
 
 def save_results(results):
     all_img_dicts = []
@@ -76,6 +77,15 @@ def load_results(filename):
             labels.append(label) #TODO:1-index for gt?
             masks.append(seg_map == s['id'])
 
+        count = dict()
+        pan_result = seg_map.copy()
+        for _, s in enumerate(segments_info):
+            label = s['category_id']
+            if label not in count.keys():
+                count[label] = 0
+            pan_result[seg_map == s['id']] = label-1 + count[label] * INSTANCE_OFFSET #change index?
+            count[label]+=1
+
         rel_array = np.asarray(single_result_dict['relations'])
         if len(rel_array) > 20:
             rel_array = rel_array[:20]
@@ -90,29 +100,16 @@ def load_results(filename):
             labels=np.asarray(labels),
             rel_dists=rel_dists,
             refine_bboxes=np.ones((num_obj, 5)),
+            pan_results=pan_result,
         )
         results.append(result)
     
     return results
 
-
-evaluation1 = dict(metric=['sgdet'],
-                  relation_mode=True,
-                  classwise=True,
-                  iou_thrs=0.5,
-                  detection_method='pan_seg')
-
-evaluation2 = dict(metric=['PQ'],
-                  relation_mode=True,
-                  classwise=True,
-                  iou_thrs=0.5,
-                  detection_method='pan_seg')
-
-
 def parse_args():
     parser = argparse.ArgumentParser(
         description='MMDet eval a model')
-    parser.add_argument('config', help='config file path') # configs/_base_/datasets/psg.py
+    parser.add_argument('config', help='config file path') # configs/_base_/datasets/psg_val.py
     parser.add_argument('input_path', help='input file path')
     parser.add_argument('output_path', help='output file path')
     
@@ -126,16 +123,16 @@ def main():
 
     dataset = build_dataset(cfg.data.test)
     outputs = load_results(args.input_path)
-    metric1 = dataset.evaluate(outputs, **evaluation1)
-    metric2 = dataset.evaluate(outputs, **evaluation2)
+    metric1 = dataset.evaluate(outputs, **cfg.evaluation1)
+    metric2 = dataset.evaluate(outputs, **cfg.evaluation2)
     
-    output_filename = os.path.join(args.output_dir, 'scores.txt')
+    output_filename = os.path.join(args.output_path, 'scores.txt')
     
     with open(output_filename, 'w') as f3:
         f3.write('Recall R 20: {}\n'.format(metric1['sgdet_recall_R_20']))
         f3.write('MeanRecall R 20: {}\n'.format(metric1['sgdet_mean_recall_mR_20']))
         f3.write('PQ: {}\n'.format(metric2['PQ']))
-        f3.write('Final Score: {}\n'.format(metric1['sgdet_recall_R_20'] * 0.3 + metric1['sgdet_mean_recall_mR_20'] * 0.6 + 0.1 * metric2['PQ']))
+        f3.write('Final Score: {}\n'.format(metric1['sgdet_recall_R_20'] * 0.3 + metric1['sgdet_mean_recall_mR_20'] * 0.6 + 0.001 * metric2['PQ']))
 
 
 if __name__ == '__main__':
