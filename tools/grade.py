@@ -8,7 +8,7 @@ import numpy as np
 import PIL
 from mmcv import Config
 from mmdet.datasets.coco_panoptic import INSTANCE_OFFSET
-from panopticapi.utils import rgb2id
+from panopticapi.utils import rgb2id, id2rgb
 from PIL import Image
 
 from openpsg.datasets import build_dataset
@@ -36,6 +36,23 @@ def save_results(results):
 
             segment = dict(category_id=int(label), id=rgb2id((r, g, b)))
             segments_info.append(segment)
+
+        count = dict()
+        segments_info = []
+        for label, mask in zip(labels, masks):
+            if label not in count.keys():
+                count[label] = 0
+            id = label-1 + count[label] * INSTANCE_OFFSET #change index?
+            count[label] += 1
+            segment = dict(
+                category_id=int(label),
+                id=id)
+            segments_info.append(segment)
+            r, g, b = id2rgb(id)
+            coloring_mask = 1 * np.vstack([[mask]] * 3)
+            for j, color in enumerate([r, g, b]):
+                coloring_mask[j, :, :] = coloring_mask[j, :, :] * color
+            img = img + coloring_mask
 
         image_path = 'submission/panseg/%d.png' % idx
         # image_array = np.uint8(img).transpose((2,1,0))
