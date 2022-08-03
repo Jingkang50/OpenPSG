@@ -17,6 +17,7 @@ from mmdet.datasets import build_dataloader, replace_ImageToTensor
 from mmdet.models import build_detector
 
 from openpsg.datasets import build_dataset
+from grade import save_results
 
 
 def parse_args():
@@ -86,6 +87,9 @@ def parse_args():
                         choices=['none', 'pytorch', 'slurm', 'mpi'],
                         default='none',
                         help='job launcher')
+    parser.add_argument('--submit', action='store_true',
+                        help='save output to a json file and save the panoptic mask as a png image into a folder for grading purpose')
+    
     parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
@@ -204,6 +208,8 @@ def main():
             broadcast_buffers=False)
         outputs = multi_gpu_test(model, data_loader, args.tmpdir,
                                  args.gpu_collect)
+    if args.submit:
+        save_results(outputs)
 
     rank, _ = get_dist_info()
     if rank == 0:
