@@ -5,12 +5,12 @@ import os
 import random
 
 import numpy as np
-from tqdm import tqdm
 import PIL
 from mmcv import Config
 from mmdet.datasets.coco_panoptic import INSTANCE_OFFSET
 from panopticapi.utils import rgb2id
 from PIL import Image
+from tqdm import tqdm
 
 from openpsg.datasets import build_dataset
 from openpsg.models.relation_heads.approaches import Result
@@ -18,8 +18,8 @@ from openpsg.models.relation_heads.approaches import Result
 
 def save_results(results):
     all_img_dicts = []
-    if not os.path.isdir("submission/panseg/"):
-        os.makedirs("submission/panseg/")
+    if not os.path.isdir('submission/panseg/'):
+        os.makedirs('submission/panseg/')
     for idx, result in enumerate(results):
         if not isinstance(result, Result):
             continue
@@ -48,12 +48,12 @@ def save_results(results):
         single_result_dict = dict(
             relations=rels.astype(np.int32).tolist(),
             segments_info=segments_info,
-            pan_seg_file_name="%d.png" % idx,
+            pan_seg_file_name='%d.png' % idx,
         )
 
         all_img_dicts.append(single_result_dict)
-    if not os.path.isdir("submission"):
-        os.mkdir("submission")
+    if not os.path.isdir('submission'):
+        os.mkdir('submission')
     with open('submission/relation.json', 'w') as outfile:
         json.dump(all_img_dicts, outfile, default=str)
 
@@ -63,7 +63,8 @@ def load_results(loadpath):
         all_img_dicts = json.load(infile)
 
     results = []
-    for single_result_dict in tqdm(all_img_dicts, desc='Loading results from json...'):
+    for single_result_dict in tqdm(all_img_dicts,
+                                   desc='Loading results from json...'):
         pan_seg_filename = single_result_dict['pan_seg_file_name']
         pan_seg_filename = os.path.join(loadpath, 'panseg', pan_seg_filename)
         pan_seg_img = np.array(Image.open(pan_seg_filename))
@@ -87,8 +88,9 @@ def load_results(loadpath):
             label = int(s['category_id'])
             if label not in count.keys():
                 count[label] = 0
-            pan_result[seg_map == int(s['id'])] = label - 1 + count[
-                label] * INSTANCE_OFFSET  # change index?
+            pan_result[seg_map == int(
+                s['id']
+            )] = label - 1 + count[label] * INSTANCE_OFFSET  # change index?
             count[label] += 1
 
         rel_array = np.asarray(single_result_dict['relations'])
@@ -137,10 +139,6 @@ def main():
         f3.write('MeanRecall R 20: {}\n'.format(
             metric1['sgdet_mean_recall_mR_20']))
         f3.write('PQ: {}\n'.format(metric2['PQ']))
-        f3.write(
-            'Final Score: {}\n'.format(metric1['sgdet_recall_R_20'] * 0.3 +
-                                       metric1['sgdet_mean_recall_mR_20'] *
-                                       0.6 + 0.001 * metric2['PQ']))
 
 
 if __name__ == '__main__':

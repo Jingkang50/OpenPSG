@@ -3,7 +3,6 @@ data_val
 work_dirs/
 wandb/
 submission/
-evaluation/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
