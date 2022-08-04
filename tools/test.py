@@ -88,7 +88,6 @@ def parse_args():
                         choices=['none', 'pytorch', 'slurm', 'mpi'],
                         default='none',
                         help='job launcher')
-<<<<<<< HEAD
     parser.add_argument(
         '--submit',
         action='store_true',
@@ -96,11 +95,6 @@ def parse_args():
         'save output to a json file and save the panoptic mask as a png image into a folder for grading purpose'
     )
 
-=======
-    parser.add_argument('--submit', action='store_true',
-                        help='save output to a json file and save the panoptic mask as a png image into a folder for grading purpose')
-    
->>>>>>> d66dfa70429001ad80c2a8984be9d86a9da703bc
     parser.add_argument('--local_rank', type=int, default=0)
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
