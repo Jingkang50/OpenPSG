@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=BLFFyb" target='_blank'>
+  <a href="" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   <br>
@@ -52,7 +52,8 @@
 ---
 
 ## Updates
-- **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join in our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to keep updated!
+- **Aug 5, 2022**: The PSG Challenge will be available on [International Algorithm Case Competition ](https://iacc.pazhoulab-huangpu.com/)! All the data will be available there then! Stay tuned!
+- **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with a prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join us on our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to stay updated!
 - **July 25, 2022**: PSG paper is available on [arXiv](https://arxiv.org/abs/2207.11247).
 - **July 3, 2022**: PSG is accepted by ECCV'22.
 ## What is PSG Task?
@@ -134,7 +135,11 @@ pip install wandb
 wandb login
 ```
 
-[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=BLFFyb) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+[Datasets]() and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+
+**Before October 2021, we only release part of the PSG data for competition, where part of the test set annotations are wiped out. Users should change the `json` filename in [`psg.py`](https://github.com/Jingkang50/OpenPSG/blob/d66dfa70429001ad80c2a8984be9d86a9da703bc/configs/_base_/datasets/psg.py#L3) to a correct filename for training or submission.**
+
+**For the PSG competition, we provide `psg_train_val.json` (45697 training data + 1000 validation data with GT). Participant should use `psg_val_test.json` (1000 validation data with GT + 1177 test data without GT) to submit.**
 
 Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
 
@@ -146,8 +151,8 @@ Our codebase accesses the datasets from `./data/` and pretrained models from `./
 │   │   ├── annotations
 │   │   └── ...
 │   └── psg
-│       ├── psg.json
-│       ├── tiny_psg.json
+│       ├── psg_train_val.json
+│       ├── psg_val_test.json
 │       └── ...
 ├── openpsg
 ├── scripts
