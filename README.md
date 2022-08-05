@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBDJ0bqKRfXnUPUi7cL5By0g?e=BqB5cw" target='_blank'>
+  <a href="" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   <br>
@@ -52,7 +52,7 @@
 ---
 
 ## Updates
-- **Aug 1, 2022**: The PSG Challenge is available on [Codalab](https://t.co/bdFtbXdwJN)!
+- **Aug 5, 2022**: The PSG Challenge will be available on [International Algorithm Case Competition ](https://iacc.pazhoulab-huangpu.com/)! All the data will be available there then! Stay tuned!
 - **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with a prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join us on our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to stay updated!
 - **July 25, 2022**: PSG paper is available on [arXiv](https://arxiv.org/abs/2207.11247).
 - **July 3, 2022**: PSG is accepted by ECCV'22.
@@ -132,7 +132,7 @@ pip install wandb
 wandb login
 ```
 
-[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBDJ0bqKRfXnUPUi7cL5By0g?e=BqB5cw) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+[Datasets]() and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
 
 **Before October 2021, we only release part of the PSG data for competition, where part of the test set annotations are wiped out. Users should change the `json` filename in [`psg.py`](https://github.com/Jingkang50/OpenPSG/blob/d66dfa70429001ad80c2a8984be9d86a9da703bc/configs/_base_/datasets/psg.py#L3) to a correct filename for training or submission.**
 
