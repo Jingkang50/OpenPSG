@@ -18,7 +18,7 @@
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   <br>
-  <a href="https://huggingface.co/" target='_blank'>
+  <a href="https://huggingface.co/spaces/mmlab-ntu/OpenPSG" target='_blank'>
     <img src="https://img.shields.io/badge/Demo-HuggingFace-ffca37?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
