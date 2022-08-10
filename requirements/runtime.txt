@@ -5,3 +5,4 @@ six
 terminaltables
 graphviz
 h5py
+xmltodict
