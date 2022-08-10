@@ -6,4 +6,3 @@ terminaltables
 graphviz
 h5py
 xmltodict
-git+https://github.com/cocodataset/panopticapi.git#egg=panopticapi
