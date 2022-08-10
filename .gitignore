@@ -2,6 +2,7 @@ data
 data_val
 work_dirs/
 wandb/
+mmdet/
 submission/
 
 # Byte-compiled / optimized / DLL files

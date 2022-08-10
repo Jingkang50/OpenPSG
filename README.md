@@ -18,7 +18,7 @@
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   <br>
-  <a href="https://huggingface.co/" target='_blank'>
+  <a href="https://huggingface.co/spaces/mmlab-ntu/OpenPSG" target='_blank'>
     <img src="https://img.shields.io/badge/Demo-HuggingFace-ffca37?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
@@ -130,6 +130,12 @@ pip install detectron2==0.5 -f \
 # If you're using wandb for logging
 pip install wandb
 wandb login
+
+# If you develop and run openpsg directly, install it from source:
+pip install -v -e .
+# "-v" means verbose, or more output
+# "-e" means installing a project in editable mode,
+# thus any local modifications made to the code will take effect without reinstallation.
 ```
 
 [Datasets]() and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.

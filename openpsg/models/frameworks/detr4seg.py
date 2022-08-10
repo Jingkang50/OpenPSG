@@ -17,7 +17,7 @@ from mmdet.datasets.coco_panoptic import INSTANCE_OFFSET
 from mmdet.models import DETECTORS, SingleStageDetector
 
 from openpsg.models.relation_heads.approaches import Result
-from openpsg.utils import adjust_text_color, draw_text, get_colormap
+from openpsg.utils.utils import adjust_text_color, draw_text, get_colormap
 
 
 def seg2Result(segs):

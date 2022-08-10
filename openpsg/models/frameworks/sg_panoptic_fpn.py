@@ -9,7 +9,7 @@ from mmdet.models import DETECTORS, PanopticFPN
 from mmdet.models.builder import build_head
 
 from openpsg.models.relation_heads.approaches import Result
-from openpsg.utils import adjust_text_color, draw_text, get_colormap
+from openpsg.utils.utils import adjust_text_color, draw_text, get_colormap
 
 
 @DETECTORS.register_module()
