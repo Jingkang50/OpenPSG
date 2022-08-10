@@ -10,8 +10,8 @@ from detectron2.data.transforms import ScaleTransform
 from detectron2.utils.colormap import colormap
 from detectron2.utils.visualizer import VisImage
 from panopticapi.utils import rgb2id
-from vis_tools.detectron_viz import Visualizer
-from vis_tools.preprocess import x1y1wh_to_xyxy
+from .. import Visualizer
+from .preprocess import x1y1wh_to_xyxy
 
 
 def get_colormap(num_colors: int):

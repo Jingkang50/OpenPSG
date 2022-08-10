@@ -119,6 +119,12 @@ pip install detectron2==0.5 -f \
 # If you're using wandb for logging
 pip install wandb
 wandb login
+
+# If you develop and run openpsg directly, install it from source:
+pip install -v -e .
+# "-v" means verbose, or more output
+# "-e" means installing a project in editable mode,
+# thus any local modifications made to the code will take effect without reinstallation.
 ```
 
 [Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=KApssd) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.

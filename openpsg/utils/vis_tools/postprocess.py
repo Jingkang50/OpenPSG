@@ -10,9 +10,9 @@ from detectron2.data.transforms import ScaleTransform
 from detectron2.structures import BitMasks, Boxes, pairwise_ioa, pairwise_iou
 from panopticapi.utils import rgb2id
 from tqdm import tqdm
-from vis_tools.datasets import (init_coco_panoptic_dataset, init_gqa_dataset,
+from .datasets import (init_coco_panoptic_dataset, init_gqa_dataset,
                                 init_vg_dataset, init_vrr_vg_dataset)
-from vis_tools.preprocess import (load_json, resize_bbox, save_json,
+from .preprocess import (load_json, resize_bbox, save_json,
                                   segment_to_bbox, x1y1wh_to_xyxy,
                                   xyxy_to_xcycwh)
 

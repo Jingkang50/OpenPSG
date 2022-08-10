@@ -19,7 +19,7 @@ from mmdet.models import ROI_EXTRACTORS
 from torch.nn.modules.utils import _pair
 
 from openpsg.models.relation_heads.approaches import PointNetFeat
-from openpsg.utils import enumerate_by_image
+from openpsg.utils.utils import enumerate_by_image
 
 
 @ROI_EXTRACTORS.register_module()
