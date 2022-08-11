@@ -948,7 +948,6 @@ class PSGTrHead(AnchorFreeHead):
             1)[triplet_index]  #### NOTE: to match the evaluation in vg
 
         labels = torch.cat((s_labels, o_labels), 0)
-        complete_labels = labels
         scores = torch.cat((s_scores, o_scores), 0)
 
         if self.use_mask:
@@ -964,7 +963,44 @@ class PSGTrHead(AnchorFreeHead):
 
             s_mask_pred = torch.sigmoid(s_mask_pred) > 0.85
             o_mask_pred = torch.sigmoid(o_mask_pred) > 0.85
-            output_masks = torch.cat((s_mask_pred, o_mask_pred), 0)
+            ### triplets deduplicate####
+            relation_classes = defaultdict(lambda: [])
+            for k, (s_l,o_l,r_l) in enumerate(zip(s_labels,o_labels,r_labels)):
+                relation_classes[(s_l.item(),o_l.item(),r_l.item())].append(k)
+            s_binary_masks = s_mask_pred.to(torch.float).flatten(1)
+            o_binary_masks = o_mask_pred.to(torch.float).flatten(1)
+
+            def dedup_triplets(triplets_ids, s_binary_masks, o_binary_masks, keep_tri):
+                while len(triplets_ids) > 1:
+                    base_s_mask = s_binary_masks[triplets_ids[0]].unsqueeze(0)
+                    base_o_mask = o_binary_masks[triplets_ids[0]].unsqueeze(0)
+                    other_s_masks = s_binary_masks[triplets_ids[1:]]
+                    other_o_masks = o_binary_masks[triplets_ids[1:]]
+                    # calculate ious
+                    s_ious = base_s_mask.mm(other_s_masks.transpose(0,1))/((base_s_mask+other_s_masks)>0).sum(-1)
+                    o_ious = base_o_mask.mm(other_o_masks.transpose(0,1))/((base_o_mask+other_o_masks)>0).sum(-1)
+                    ids_left = []
+                    for s_iou, o_iou, other_id in zip(s_ious[0],o_ious[0],triplets_ids[1:]):
+                        if (s_iou>0.5) & (o_iou>0.5):
+                            keep_tri[other_id] = False
+                        else:
+                            ids_left.append(other_id)
+                    triplets_ids = ids_left
+                return keep_tri
+            
+            keep_tri = torch.ones_like(r_labels,dtype=torch.bool)
+            for triplets_ids in relation_classes.values():
+                if len(triplets_ids)>1:
+                    keep_tri = dedup_triplets(triplets_ids, s_binary_masks, o_binary_masks, keep_tri)
+
+            complete_labels = torch.cat((s_labels[keep_tri], o_labels[keep_tri]), 0)
+            output_masks = torch.cat((s_mask_pred[keep_tri], o_mask_pred[keep_tri]), 0)
+            r_scores = r_scores[keep_tri]
+            r_labels = r_labels[keep_tri]
+            r_dists = r_dists[keep_tri]
+            rel_pairs = torch.arange(keep_tri.sum()*2,
+                            dtype=torch.int).reshape(2, -1).T
+            ###end triplets deduplicate####
 
             keep = (labels != s_logits.shape[-1] - 1) & (
                 scores > 0.85)  ## the threshold is set to 0.85
@@ -1046,8 +1082,6 @@ class PSGTrHead(AnchorFreeHead):
         o_det_bboxes = torch.cat((o_det_bboxes, o_scores.unsqueeze(1)), -1)
 
         det_bboxes = torch.cat((s_det_bboxes, o_det_bboxes), 0)
-        rel_pairs = torch.arange(len(det_bboxes),
-                                 dtype=torch.int).reshape(2, -1).T
 
         if self.use_mask:
             return det_bboxes, complete_labels, rel_pairs, output_masks, pan_img, r_scores, r_labels, r_dists
