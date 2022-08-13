@@ -31,8 +31,6 @@
     &nbsp;&nbsp;&nbsp;
   <a href="https://replicate.com/cjwbw/openpsg" target='_blank'>
     <img src="https://img.shields.io/badge/Replicate-Demo & Cloud API-1b82c2?style=flat-square">
-
-    [![Replicate](https://replicate.com/kimgeonung/bigcolor/badge)](https://replicate.com/kimgeonung/bigcolor)
   </a>
 
 
