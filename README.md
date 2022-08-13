@@ -28,6 +28,9 @@
   &nbsp;&nbsp;&nbsp;
   <a href="https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw" target='_blank'>
     <img src="https://img.shields.io/badge/Forum-Slack-4c1448?style=flat-square">
+    &nbsp;&nbsp;&nbsp;
+  <a href="https://replicate.com/cjwbw/openpsg" target='_blank'>
+    <img src="https://img.shields.io/badge/Replicate-Demo & Cloud API-1b82c2?style=flat-square">
   </a>
 
 
@@ -52,6 +55,7 @@
 ---
 
 ## Updates
+- **Aug 12, 2022**: Replicate demo and Cloud API is added, try it [here](https://replicate.com/cjwbw/openpsg)!
 - **Aug 10, 2022**: We launched [Hugging Face demo 🤗](https://huggingface.co/spaces/mmlab-ntu/OpenPSG). Try it with your scene!
 - **Aug 5, 2022**: The PSG Challenge will be available on [International Algorithm Case Competition ](https://iacc.pazhoulab-huangpu.com/)! All the data will be available there then! Stay tuned!
 - **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with a prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join us on our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to stay updated!
