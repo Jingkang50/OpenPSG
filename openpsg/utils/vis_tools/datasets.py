@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from detectron2.data import DatasetCatalog, MetadataCatalog
-from vis_tools.preprocess import load_json
-from vis_tools.viz import get_colormap
+from .preprocess import load_json
+from .viz import get_colormap
 
 data_dir = Path('data')
 

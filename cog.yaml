@@ -1,0 +1,25 @@
+build:
+  cuda: "10.1"
+  gpu: true
+  python_version: "3.8"
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "libglib2.0-0"
+  python_packages:
+    - "numpy==1.21.5"
+    - "ipython==7.21.0"
+    - "xmltodict==0.13.0"
+    - "openmim==0.2.1"
+    - "mmdet==2.20.0"
+    - "h5py==3.7.0"
+    - "graphviz==0.20.1"
+    - "torch==1.7.0"
+    - "torchvision==0.8.1"
+    - "Pillow==9.2.0"
+  
+  run:
+    - pip install mmcv-full==1.4.3 -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.7.0/index.html
+    - pip install git+https://github.com/cocodataset/panopticapi.git
+    - pip install detectron2==0.5 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.7/index.html
+
+predict: "predict.py:Predictor"

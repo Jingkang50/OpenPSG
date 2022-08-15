@@ -14,11 +14,11 @@
     <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=BLFFyb" target='_blank'>
+  <a href="" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   <br>
-  <a href="https://huggingface.co/" target='_blank'>
+  <a href="https://huggingface.co/spaces/mmlab-ntu/OpenPSG" target='_blank'>
     <img src="https://img.shields.io/badge/Demo-HuggingFace-ffca37?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
@@ -28,6 +28,9 @@
   &nbsp;&nbsp;&nbsp;
   <a href="https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw" target='_blank'>
     <img src="https://img.shields.io/badge/Forum-Slack-4c1448?style=flat-square">
+    &nbsp;&nbsp;&nbsp;
+  <a href="https://replicate.com/cjwbw/openpsg" target='_blank'>
+    <img src="https://img.shields.io/badge/Replicate-Demo & Cloud API-1b82c2?style=flat-square">
   </a>
 
 
@@ -52,36 +55,39 @@
 ---
 
 ## Updates
-- **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join in our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to keep updated!
+- **Aug 12, 2022**: Replicate demo and Cloud API is added, try it [here](https://replicate.com/cjwbw/openpsg)!
+- **Aug 10, 2022**: We launched [Hugging Face demo 🤗](https://huggingface.co/spaces/mmlab-ntu/OpenPSG). Try it with your scene!
+- **Aug 5, 2022**: The PSG Challenge will be available on [International Algorithm Case Competition ](https://iacc.pazhoulab-huangpu.com/)! All the data will be available there then! Stay tuned!
+- **July 25, 2022**: :boom: We are preparing a PSG competition with [ECCV'22 SenseHuman Workshop](https://sense-human.github.io) and [International Algorithm Case Competition](https://iacc.pazhoulab-huangpu.com/), starting from Aug 6, with a prize pool of :money_mouth_face: **US$150K** :money_mouth_face:. Join us on our [Slack](https://join.slack.com/t/psgdataset/shared_invite/zt-1d14sdkw3-59pJdrp6gLAHuBObPL91qw) to stay updated!
 - **July 25, 2022**: PSG paper is available on [arXiv](https://arxiv.org/abs/2207.11247).
 - **July 3, 2022**: PSG is accepted by ECCV'22.
 ## What is PSG Task?
-<strong>The Panoptic Scene Graph Generation (PSG) Task</strong> aims to interpret a complex scene image with a scene graph representation, and each node in the scene graph should be grounded by its pixel-accurate segmentation mask in the image.
+<strong>The Panoptic Scene Graph Generation (PSG) Task</strong> aims to interpret a complex scene image with a scene graph representation, with each node in the scene graph grounded by its pixel-accurate segmentation mask in the image.
 
-To promote comprehensive scene understanding, we take account all the content in the image, including things and stuff, to generate the scene graph.
+To promote comprehensive scene understanding, we take into account all the content in the image, including "things" and "stuff", to generate the scene graph.
 
 | ![psg.jpg](https://live.staticflickr.com/65535/52231748332_4945d88929_b.jpg) |
 |:--:|
-| <b>PSG Task: To generate a scene graph that is grounded by the panoptic segmentation</b>|
+| <b>PSG Task: To generate a scene graph that is grounded by its panoptic segmentation</b>|
 
 <!-- ## Demo of the Current SOTA PSGTR -->
 
 
 ## PSG addresses many SGG problems
-We believe that the biggest problem of classic scene graph generation (SGG) comes from the noisy dataset.
-Classic scene graph generation datasets adopt bounding box-based object grounding, which inevitably causes a number of issues:
+We believe that the biggest problem of classic scene graph generation (SGG) comes from noisy datasets.
+Classic scene graph generation datasets adopt a bounding box-based object grounding, which inevitably causes a number of issues:
 - **Coarse localization**: bounding boxes cannot reach pixel-level accuracy,
 - **Inability to ground comprehensively**: bounding boxes cannot ground backgrounds,
-- **Tendency to provide trivial information**: current datasets usually capture objects like `head` to form the trivial relation of `person-has-head`, due to the large freedom of bounding box annotation.
+- **Tendency to provide trivial information**: current datasets usually capture frivolous objects like `head` to form trivial relations like `person-has-head`, due to too much freedom given during bounding box annotation.
 - **Duplicate groundings**: the same object could be grounded by multiple separate bounding boxes.
 
-All of the problems above can be easily addressed by PSG dataset, which we ground the objects using panoptic segmentation with appropriate granularity of object categories (adopted from COCO).
+All of the problems above can be easily addressed by the PSG dataset, which grounds the objects using panoptic segmentation with an appropriate granularity of object categories (adopted from COCO).
 
-In fact, PSG dataset contains 49k overlapping images from COCO and Visual Genome. In the nutshell, we ask annotators to annotate relations based on COCO panoptic segmentation, i.e., relations are mask-to-mask.
+In fact, the PSG dataset contains 49k overlapping images from COCO and Visual Genome. In a nutshell, we asked annotators to annotate relations based on COCO panoptic segmentations, i.e., relations are mask-to-mask.
 
 | ![psg.jpg](https://live.staticflickr.com/65535/52231743087_2bda038ee2_b.jpg) |
 |:--:|
-| <b>Comparison between classic VG-150 and PSG.</b>|
+| <b>Comparison between the classic VG-150 and PSG.</b>|
 
 ## Clear Predicate Definition
 We also find that a good definition of predicates is unfortunately ignored in the previous SGG datasets.
@@ -129,9 +135,19 @@ pip install detectron2==0.5 -f \
 # If you're using wandb for logging
 pip install wandb
 wandb login
+
+# If you develop and run openpsg directly, install it from source:
+pip install -v -e .
+# "-v" means verbose, or more output
+# "-e" means installing a project in editable mode,
+# thus any local modifications made to the code will take effect without reinstallation.
 ```
 
-[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBY9ZRx3XJzfPjo8uhw5Rv6Q?e=BLFFyb) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+[Datasets]() and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+
+**Before October 2021, we only release part of the PSG data for competition, where part of the test set annotations are wiped out. Users should change the `json` filename in [`psg.py`](https://github.com/Jingkang50/OpenPSG/blob/d66dfa70429001ad80c2a8984be9d86a9da703bc/configs/_base_/datasets/psg.py#L3) to a correct filename for training or submission.**
+
+**For the PSG competition, we provide `psg_train_val.json` (45697 training data + 1000 validation data with GT). Participant should use `psg_val_test.json` (1000 validation data with GT + 1177 test data without GT) to submit.**
 
 Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
 
@@ -143,8 +159,8 @@ Our codebase accesses the datasets from `./data/` and pretrained models from `./
 │   │   ├── annotations
 │   │   └── ...
 │   └── psg
-│       ├── psg.json
-│       ├── tiny_psg.json
+│       ├── psg_train_val.json
+│       ├── psg_val_test.json
 │       └── ...
 ├── openpsg
 ├── scripts
