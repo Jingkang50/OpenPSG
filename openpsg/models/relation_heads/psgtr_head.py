@@ -1018,8 +1018,8 @@ class PSGTrHead(AnchorFreeHead):
             ###end triplets deduplicate####
             
             #### for panoptic postprocessing ####
-            keep = (s_labels != s_logits.shape[-1] - 1) & (
-                    o_labels != s_logits.shape[-1] - 1) & (
+            keep = (s_labels != (s_logits.shape[-1] - 1)) & (
+                    o_labels != (s_logits.shape[-1] - 1)) & (
                     s_scores[keep_tri]>0.5) & (o_scores[keep_tri] > 0.5) & (r_scores > 0.3) ## the threshold is set to 0.85
             r_scores = r_scores[keep]
             r_labels = r_labels[keep]
@@ -1036,8 +1036,10 @@ class PSGTrHead(AnchorFreeHead):
 
             if labels.numel() == 0:
                 pan_img = torch.ones(mask_size).cpu().to(torch.long)
-                pan_masks = torch.ones_like(masks).cpu().to(torch.long)
+                pan_masks = pan_img.unsqueeze(0).cpu().to(torch.long)
                 pan_rel_pairs = torch.arange(len(labels), dtype=torch.int).to(masks.device).reshape(2, -1).T
+                rels = torch.tensor([0,0,0]).view(-1,3)
+                pan_labels = torch.tensor([0])
             else:
                 stuff_equiv_classes = defaultdict(lambda: [])
                 thing_classes = defaultdict(lambda: [])
@@ -1129,7 +1131,10 @@ class PSGTrHead(AnchorFreeHead):
                     return area, seg_img, pan_rel_pairs, pan_masks, r_labels, r_dists, pan_labels
 
                 area, pan_img, pan_rel_pairs, pan_masks, r_labels, r_dists, pan_labels = get_ids_area(mask_logits, pan_rel_pairs, r_labels, r_dists, dedup=True)
-                rels = torch.cat((pan_rel_pairs,r_labels.unsqueeze(-1)),-1)
+                if r_labels.numel() == 0:
+                    rels = torch.tensor([0,0,0]).view(-1,3)
+                else:
+                    rels = torch.cat((pan_rel_pairs,r_labels.unsqueeze(-1)),-1)
                 # if labels.numel() > 0:
                 #     # We know filter empty masks as long as we find some
                 #     while True:
