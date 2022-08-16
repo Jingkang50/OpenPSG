@@ -13,34 +13,50 @@ from openpsg.models.relation_heads.approaches import Result
 from openpsg.utils.utils import adjust_text_color, draw_text, get_colormap
 
 
-def triplet2Result(triplets, use_mask, eval_mask_rels=False):
+def triplet2Result(triplets, use_mask, eval_pan_rels=True):
     if use_mask:
-        bboxes, labels, rel_pairs, masks, pan_seg, r_scores, r_labels, r_dists \
+        bboxes, labels, rel_pairs, masks, pan_rel_pairs, pan_seg, complete_r_labels, complete_r_dists, \
+            r_labels, r_dists, pan_masks, rels, pan_labels \
             = triplets
         if isinstance(bboxes, torch.Tensor):
             labels = labels.detach().cpu().numpy()
             bboxes = bboxes.detach().cpu().numpy()
             rel_pairs = rel_pairs.detach().cpu().numpy()
-            r_scores = r_scores.detach().cpu().numpy()
+            complete_r_labels = complete_r_labels.detach().cpu().numpy()
+            complete_r_dists = complete_r_dists.detach().cpu().numpy()
             r_labels = r_labels.detach().cpu().numpy()
             r_dists = r_dists.detach().cpu().numpy()
         if isinstance(pan_seg, torch.Tensor):
             pan_seg = pan_seg.detach().cpu().numpy()
+            pan_rel_pairs = pan_rel_pairs.detach().cpu().numpy()
             masks = masks.detach().cpu().numpy()
-        return Result(refine_bboxes=bboxes,
-                      labels=labels,
-                      formatted_masks=dict(pan_results=pan_seg),
-                      rel_pair_idxes=rel_pairs,
-                      rel_dists=r_dists,
-                      rel_labels=r_labels,
-                      pan_results=pan_seg,
-                      masks=masks)
+            pan_masks = pan_masks.detach().cpu().numpy()
+            rels = rels.detach().cpu().numpy()
+            pan_labels = pan_labels.detach().cpu().numpy()
+        if eval_pan_rels:
+            return Result(refine_bboxes=bboxes,
+                        labels=pan_labels+1,
+                        formatted_masks=dict(pan_results=pan_seg),
+                        rel_pair_idxes=pan_rel_pairs,# elif not pan: rel_pairs,
+                        rel_dists=r_dists,
+                        rel_labels=r_labels,
+                        pan_results=pan_seg,
+                        masks=pan_masks,
+                        rels=rels)
+        else:
+            return Result(refine_bboxes=bboxes,
+                        labels=labels,
+                        formatted_masks=dict(pan_results=pan_seg),
+                        rel_pair_idxes=rel_pairs,
+                        rel_dists=complete_r_dists,
+                        rel_labels=complete_r_labels,
+                        pan_results=pan_seg,
+                        masks=masks)
     else:
-        bboxes, labels, rel_pairs, r_scores, r_labels, r_dists = triplets
+        bboxes, labels, rel_pairs, r_labels, r_dists = triplets
         labels = labels.detach().cpu().numpy()
         bboxes = bboxes.detach().cpu().numpy()
         rel_pairs = rel_pairs.detach().cpu().numpy()
-        r_scores = r_scores.detach().cpu().numpy()
         r_labels = r_labels.detach().cpu().numpy()
         r_dists = r_dists.detach().cpu().numpy()
         return Result(

@@ -505,12 +505,14 @@ class PSGTrHead(AnchorFreeHead):
 
             # mask loss
             # s_focal_loss = self.sub_focal_loss(s_mask_preds,s_mask_targets,num_matches)
-            s_dice_loss = self.sub_dice_loss(s_mask_preds, s_mask_targets,
-                                             num_matches)
+            s_dice_loss = self.sub_dice_loss(
+                s_mask_preds, s_mask_targets,
+                num_matches)
 
             # o_focal_loss = self.obj_focal_loss(o_mask_preds,o_mask_targets,num_matches)
-            o_dice_loss = self.obj_dice_loss(o_mask_preds, o_mask_targets,
-                                             num_matches)
+            o_dice_loss = self.obj_dice_loss(
+                o_mask_preds, o_mask_targets,
+                num_matches) 
         else:
             s_dice_loss = None
             o_dice_loss = None
@@ -772,13 +774,15 @@ class PSGTrHead(AnchorFreeHead):
             assert gt_sub_masks.size() == gt_obj_masks.size()
             # mask targets for subjects and objects
             s_mask_targets = gt_sub_masks[
-                s_sampling_result.pos_assigned_gt_inds, ...]
+                s_sampling_result.pos_assigned_gt_inds,
+                ...]  
             s_mask_preds = s_mask_preds[pos_inds]
+            
 
             o_mask_targets = gt_obj_masks[
                 o_sampling_result.pos_assigned_gt_inds, ...]
             o_mask_preds = o_mask_preds[pos_inds]
-
+            
             s_mask_preds = interpolate(s_mask_preds[:, None],
                                        size=gt_sub_masks.shape[-2:],
                                        mode='bilinear',
@@ -947,9 +951,6 @@ class PSGTrHead(AnchorFreeHead):
             -1, self.num_relations +
             1)[triplet_index]  #### NOTE: to match the evaluation in vg
 
-        labels = torch.cat((s_labels, o_labels), 0)
-        scores = torch.cat((s_scores, o_scores), 0)
-
         if self.use_mask:
             s_mask_pred = s_mask_pred[triplet_index]
             o_mask_pred = o_mask_pred[triplet_index]
@@ -958,9 +959,9 @@ class PSGTrHead(AnchorFreeHead):
             o_mask_pred = F.interpolate(o_mask_pred.unsqueeze(1),
                                         size=mask_size).squeeze(1)
 
-            #### for panoptic postprocessing ####
-            masks = torch.cat((s_mask_pred, o_mask_pred), 0)
-
+            s_mask_pred_logits = s_mask_pred
+            o_mask_pred_logits = o_mask_pred
+            
             s_mask_pred = torch.sigmoid(s_mask_pred) > 0.85
             o_mask_pred = torch.sigmoid(o_mask_pred) > 0.85
             ### triplets deduplicate####
@@ -993,35 +994,92 @@ class PSGTrHead(AnchorFreeHead):
                 if len(triplets_ids)>1:
                     keep_tri = dedup_triplets(triplets_ids, s_binary_masks, o_binary_masks, keep_tri)
 
-            complete_labels = torch.cat((s_labels[keep_tri], o_labels[keep_tri]), 0)
-            output_masks = torch.cat((s_mask_pred[keep_tri], o_mask_pred[keep_tri]), 0)
+            s_labels = s_labels[keep_tri] 
+            o_labels = o_labels[keep_tri]
+            s_mask_pred = s_mask_pred[keep_tri]
+            o_mask_pred = o_mask_pred[keep_tri]
+
+            complete_labels = torch.cat((s_labels, o_labels), 0)
+            output_masks = torch.cat((s_mask_pred, o_mask_pred), 0)
             r_scores = r_scores[keep_tri]
             r_labels = r_labels[keep_tri]
             r_dists = r_dists[keep_tri]
             rel_pairs = torch.arange(keep_tri.sum()*2,
                             dtype=torch.int).reshape(2, -1).T
-            ###end triplets deduplicate####
+            complete_r_labels = r_labels
+            complete_r_dists = r_dists
+            
+            s_binary_masks = s_binary_masks[keep_tri]
+            o_binary_masks = o_binary_masks[keep_tri]
 
-            keep = (labels != s_logits.shape[-1] - 1) & (
-                scores > 0.85)  ## the threshold is set to 0.85
-            labels = labels[keep] - 1
-            masks = masks[keep]
-            scores = scores[keep]
+            s_mask_pred_logits = s_mask_pred_logits[keep_tri]
+            o_mask_pred_logits = o_mask_pred_logits[keep_tri]
+
+            ###end triplets deduplicate####
+            
+            #### for panoptic postprocessing ####
+            keep = (s_labels != (s_logits.shape[-1] - 1)) & (
+                    o_labels != (s_logits.shape[-1] - 1)) & (
+                    s_scores[keep_tri]>0.5) & (o_scores[keep_tri] > 0.5) & (r_scores > 0.3) ## the threshold is set to 0.85
+            r_scores = r_scores[keep]
+            r_labels = r_labels[keep]
+            r_dists = r_dists[keep]
+
+            labels = torch.cat((s_labels[keep], o_labels[keep]), 0) - 1
+            masks = torch.cat((s_mask_pred[keep], o_mask_pred[keep]), 0)
+            binary_masks = masks.to(torch.float).flatten(1)
+            s_mask_pred_logits = s_mask_pred_logits[keep]
+            o_mask_pred_logits = o_mask_pred_logits[keep]
+            mask_logits = torch.cat((s_mask_pred_logits, o_mask_pred_logits), 0)
+
             h, w = masks.shape[-2:]
 
             if labels.numel() == 0:
                 pan_img = torch.ones(mask_size).cpu().to(torch.long)
+                pan_masks = pan_img.unsqueeze(0).cpu().to(torch.long)
+                pan_rel_pairs = torch.arange(len(labels), dtype=torch.int).to(masks.device).reshape(2, -1).T
+                rels = torch.tensor([0,0,0]).view(-1,3)
+                pan_labels = torch.tensor([0])
             else:
-                masks = masks.flatten(1)
                 stuff_equiv_classes = defaultdict(lambda: [])
+                thing_classes = defaultdict(lambda: [])
+                thing_dedup = defaultdict(lambda: [])
                 for k, label in enumerate(labels):
                     if label.item() >= 80:
                         stuff_equiv_classes[label.item()].append(k)
+                    else:
+                        thing_classes[label.item()].append(k)
 
-                def get_ids_area(masks, scores, dedup=False):
+                pan_rel_pairs = torch.arange(len(labels), dtype=torch.int).to(masks.device)
+
+                def dedup_things(pred_ids, binary_masks):
+                    while len(pred_ids) > 1:
+                        base_mask = binary_masks[pred_ids[0]].unsqueeze(0)
+                        other_masks = binary_masks[pred_ids[1:]]
+                        # calculate ious
+                        ious = base_mask.mm(other_masks.transpose(0,1))/((base_mask+other_masks)>0).sum(-1)
+                        ids_left = []
+                        thing_dedup[pred_ids[0]].append(pred_ids[0])
+                        for iou, other_id in zip(ious[0],pred_ids[1:]):
+                            if iou>0.5:
+                                thing_dedup[pred_ids[0]].append(other_id)
+                            else:
+                                ids_left.append(other_id)
+                        pred_ids = ids_left
+                    if len(pred_ids) == 1:
+                        thing_dedup[pred_ids[0]].append(pred_ids[0])
+
+                # create dict that groups duplicate masks
+                for thing_pred_ids in thing_classes.values():
+                    if len(thing_pred_ids) > 1:
+                      dedup_things(thing_pred_ids, binary_masks)
+                    else:
+                        thing_dedup[thing_pred_ids[0]].append(thing_pred_ids[0])
+
+                def get_ids_area(masks, pan_rel_pairs, r_labels, r_dists, dedup=False):
                     # This helper function creates the final panoptic segmentation image
                     # It also returns the area of the masks that appears on the image
-
+                    masks = masks.flatten(1)
                     m_id = masks.transpose(0, 1).softmax(-1)
 
                     if m_id.shape[-1] == 0:
@@ -1038,30 +1096,59 @@ class PSGTrHead(AnchorFreeHead):
                             if len(equiv) > 1:
                                 for eq_id in equiv:
                                     m_id.masked_fill_(m_id.eq(eq_id), equiv[0])
+                                    pan_rel_pairs[eq_id] = equiv[0]
+                        # Merge the masks corresponding to the same thing instance
+                        for equiv in thing_dedup.values():
+                            if len(equiv) > 1:
+                                for eq_id in equiv:
+                                    m_id.masked_fill_(m_id.eq(eq_id), equiv[0])
+                                    pan_rel_pairs[eq_id] = equiv[0]
+                    
+                    m_ids_remain,_ = m_id.unique().sort()
 
-                    seg_img = m_id * INSTANCE_OFFSET + labels[m_id]
+                    pan_rel_pairs = pan_rel_pairs.reshape(2, -1).T
+                    no_obj_filter = torch.zeros(pan_rel_pairs.shape[0],dtype=torch.bool)
+                    for triplet_id in range(pan_rel_pairs.shape[0]):
+                        if pan_rel_pairs[triplet_id,0] in m_ids_remain and pan_rel_pairs[triplet_id,1] in m_ids_remain:
+                            no_obj_filter[triplet_id]=True
+                    pan_rel_pairs = pan_rel_pairs[no_obj_filter]
+                    r_labels, r_dists = r_labels[no_obj_filter], r_dists[no_obj_filter]
+                    pan_labels = [] 
+                    pan_masks = []
+                    for i, m_id_remain in enumerate(m_ids_remain):
+                        pan_masks.append(m_id.eq(m_id_remain).unsqueeze(0))
+                        pan_labels.append(labels[m_id_remain].unsqueeze(0))
+                        m_id.masked_fill_(m_id.eq(m_id_remain), i)
+                        pan_rel_pairs.masked_fill_(pan_rel_pairs.eq(m_id_remain), i)
+                    pan_masks = torch.cat(pan_masks, 0)
+                    pan_labels = torch.cat(pan_labels, 0)
+                    seg_img = m_id * INSTANCE_OFFSET + pan_labels[m_id]
                     seg_img = seg_img.view(h, w).cpu().to(torch.long)
                     m_id = m_id.view(h, w).cpu()
                     area = []
-                    for i in range(len(scores)):
+                    for i in range(len(masks)):
                         area.append(m_id.eq(i).sum().item())
-                    return area, seg_img
+                    return area, seg_img, pan_rel_pairs, pan_masks, r_labels, r_dists, pan_labels
 
-                area, pan_img = get_ids_area(masks, scores, dedup=True)
-                if labels.numel() > 0:
-                    # We know filter empty masks as long as we find some
-                    while True:
-                        filtered_small = torch.as_tensor(
-                            [area[i] <= 4 for i, c in enumerate(labels)],
-                            dtype=torch.bool,
-                            device=keep.device)
-                        if filtered_small.any().item():
-                            scores = scores[~filtered_small]
-                            labels = labels[~filtered_small]
-                            masks = masks[~filtered_small]
-                            area, pan_img = get_ids_area(masks, scores)
-                        else:
-                            break
+                area, pan_img, pan_rel_pairs, pan_masks, r_labels, r_dists, pan_labels = get_ids_area(mask_logits, pan_rel_pairs, r_labels, r_dists, dedup=True)
+                if r_labels.numel() == 0:
+                    rels = torch.tensor([0,0,0]).view(-1,3)
+                else:
+                    rels = torch.cat((pan_rel_pairs,r_labels.unsqueeze(-1)),-1)
+                # if labels.numel() > 0:
+                #     # We know filter empty masks as long as we find some
+                #     while True:
+                #         filtered_small = torch.as_tensor(
+                #             [area[i] <= 4 for i, c in enumerate(labels)],
+                #             dtype=torch.bool,
+                #             device=keep.device)
+                #         if filtered_small.any().item():
+                #             scores = scores[~filtered_small]
+                #             labels = labels[~filtered_small]
+                #             masks = masks[~filtered_small]
+                #             area, pan_img = get_ids_area(masks, scores)
+                #         else:
+                #             break
 
         s_det_bboxes = bbox_cxcywh_to_xyxy(s_bbox_pred)
         s_det_bboxes[:, 0::2] = s_det_bboxes[:, 0::2] * img_shape[1]
@@ -1081,15 +1168,16 @@ class PSGTrHead(AnchorFreeHead):
             o_det_bboxes /= o_det_bboxes.new_tensor(scale_factor)
         o_det_bboxes = torch.cat((o_det_bboxes, o_scores.unsqueeze(1)), -1)
 
-        det_bboxes = torch.cat((s_det_bboxes, o_det_bboxes), 0)
+        det_bboxes = torch.cat((s_det_bboxes[keep_tri], o_det_bboxes[keep_tri]), 0)
 
         if self.use_mask:
-            return det_bboxes, complete_labels, rel_pairs, output_masks, pan_img, r_scores, r_labels, r_dists
+            return det_bboxes, complete_labels, rel_pairs, output_masks, pan_rel_pairs, \
+                pan_img, complete_r_labels, complete_r_dists, r_labels, r_dists, pan_masks, rels, pan_labels
         else:
-            return det_bboxes, labels, rel_pairs, r_scores, r_labels, r_dists
+            return det_bboxes, labels, rel_pairs, r_labels, r_dists
 
     def simple_test_bboxes(self, feats, img_metas, rescale=False):
-
+        
         # forward of this head requires img_metas
         # start = time.time()
         outs = self.forward(feats, img_metas)
