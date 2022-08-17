@@ -3,7 +3,7 @@ from mmcv.runner import force_fp32
 from mmdet.models import Shared2FCBBoxHead
 from mmdet.models.builder import HEADS
 
-from openpsg.utils import multiclass_nms_alt
+from openpsg.utils.utils import multiclass_nms_alt
 
 
 @HEADS.register_module()

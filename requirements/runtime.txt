@@ -1,0 +1,8 @@
+matplotlib
+numpy
+pycocotools
+six
+terminaltables
+graphviz
+h5py
+xmltodict
