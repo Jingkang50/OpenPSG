@@ -14,8 +14,12 @@
     <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="" target='_blank'>
+  <a href="https://www.cvmart.net/race/10349/dataset" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
+  </a>
+  &nbsp;&nbsp;&nbsp;
+  <a href="https://www.cvmart.net/race/10349/base" target='_blank'>
+    <img src="https://img.shields.io/badge/Competition-PSG Challenge-f2d297?style=flat-square">
   </a>
   <br>
   <a href="https://huggingface.co/spaces/mmlab-ntu/OpenPSG" target='_blank'>
@@ -69,6 +73,9 @@ To promote comprehensive scene understanding, we take into account all the conte
 | ![psg.jpg](https://live.staticflickr.com/65535/52231748332_4945d88929_b.jpg) |
 |:--:|
 | <b>PSG Task: To generate a scene graph that is grounded by its panoptic segmentation</b>|
+
+<!-- ## Demo of the Current SOTA PSGTR -->
+
 
 <!-- ## Demo of the Current SOTA PSGTR -->
 
@@ -143,11 +150,11 @@ pip install -v -e .
 # thus any local modifications made to the code will take effect without reinstallation.
 ```
 
-[Datasets]() and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+[Datasets](https://www.cvmart.net/race/10349/dataset) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
 
-**Before October 2021, we only release part of the PSG data for competition, where part of the test set annotations are wiped out. Users should change the `json` filename in [`psg.py`](https://github.com/Jingkang50/OpenPSG/blob/d66dfa70429001ad80c2a8984be9d86a9da703bc/configs/_base_/datasets/psg.py#L3) to a correct filename for training or submission.**
+**Before October 2022, we only release part of the PSG data for competition, where part of the test set annotations are wiped out. Users should change the `json` filename in [`psg.py` (Line 4-5)](https://github.com/Jingkang50/OpenPSG/blob/d66dfa70429001ad80c2a8984be9d86a9da703bc/configs/_base_/datasets/psg.py#L4) to a correct filename for training or submission.**
 
-**For the PSG competition, we provide `psg_train_val.json` (45697 training data + 1000 validation data with GT). Participant should use `psg_val_test.json` (1000 validation data with GT + 1177 test data without GT) to submit.**
+**For the PSG competition, we provide `psg_train_val.json` (45697 training data + 1000 validation data with GT). Participant should use `psg_val_test.json` (1000 validation data with GT + 1177 test data without GT) to submit. Example submit script is [here](https://github.com/Jingkang50/OpenPSG/blob/main/scripts/imp/submit_panoptic_fpn_r50_sgdet.sh). You can use [`grade.sh`](https://github.com/Jingkang50/OpenPSG/blob/main/scripts/grade.sh) to simulate the competition's grading mechanism locally.**
 
 Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
 
@@ -194,27 +201,34 @@ python -m torch.distributed.launch \
 
 **Testing**
 ```bash
-# sh scripts/basics/test_panoptic_fpn_coco.sh
+# sh scripts/imp/test_panoptic_fpn_r50_sgdet.sh
 PYTHONPATH='.':$PYTHONPATH \
 python tools/test.py \
-  configs/psg/panoptic_fpn_r50_fpn_1x_psg.py \
+  configs/imp/panoptic_fpn_r50_fpn_1x_sgdet_psg.py \
   path/to/checkpoint.pth \
-  --out work_dirs/panoptic_fpn_r50_fpn/result.pkl \
   --eval sgdet
+```
+
+**Submitting for PSG Competition**
+```bash
+# sh scripts/imp/submit_panoptic_fpn_r50_sgdet.sh
+PYTHONPATH='.':$PYTHONPATH \
+python tools/test.py \
+  configs/imp/panoptic_fpn_r50_fpn_1x_sgdet_psg.py \
+  path/to/checkpoint.pth \
+  --submit
 ```
 
 ## OpenPSG: Benchmarking PSG Task
 ### Supported methods (Welcome to Contribute!)
 
 <details open>
-<summary><b>Two-Stage Methods (6)</b></summary>
+<summary><b>Two-Stage Methods (4)</b></summary>
 
 > - [x] IMP (CVPR'17)
 > - [x] MOTIFS (CVPR'18)
 > - [x] VCTree (CVPR'19)
 > - [x] GPSNet (CVPR'20)
-> - [ ] EBSGG (CVPR'21)
-> - [ ] TopicSG (ICCV'21)
 </details>
 
 <details open>
@@ -225,7 +239,7 @@ python tools/test.py \
 </details>
 
 
-### Supported datasets
+### Supported datasets (Welcome to Contribute!)
 
 - [ ] VG-150 (IJCV'17)
 - [x] PSG (ECCV'22)
@@ -237,6 +251,7 @@ Method    | Backbone | #Epoch | R/mR@20 | R/mR@50 | R/mR@100 | ckpt
 IMP       | ResNet-50 | 12 | 16.5 / 6.52 | 18.2 / 7.05 | 18.6 / 7.23 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EiTgJ9q2h3hDpyXSdu6BtlQBHAZNwNaYmcO7SElxhkIFXw?e=8fytHc) |
 MOTIFS    | ResNet-50 | 12 | 20.0 / 9.10 | 21.7 / 9.57 | 22.0 / 9.69 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Eh4hvXIspUFKpNa_75qwDoEBJTCIozTLzm49Ste6HaoPow?e=ZdAs6z) |
 VCTree    | ResNet-50 | 12 | 20.6 / 9.70 | 22.1 / 10.2 | 22.5 / 10.2 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EhKfi9kqAd9CnSoHztQIChABeBjBD3hF7DflrNCjlHfh9A?e=lWa1bd) |
+GPSNet    | ResNet-50 | 12 | 17.8 / 7.03 | 19.6 / 7.49 | 20.1 / 7.67 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EipIhZgVgx1LuK2RUmjRg2sB8JqxMIS5GnPDHeaYy5GF6A?e=5j53VF) |
 PSGTR     | ResNet-50 | 60 | 28.4 / 16.6 | 34.4 / 20.8 | 36.3 / 22.1 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Eonc-KwOxg9EmdtGDX6ss-gB35QpKDnN_1KSWOj6U8sZwQ?e=zdqwqP) |
 PSGFormer | ResNet-50 | 60 | 18.0 / 14.8 | 19.6 / 17.0 | 20.1 / 17.6 |  [link](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EnaJchJzJPtGrkl4k09evPIB5JUkkDZ2tSS9F-Hd-1KYzA?e=9QA8Nc) |
 
