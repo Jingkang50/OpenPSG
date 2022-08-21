@@ -163,8 +163,10 @@ Our codebase accesses the datasets from `./data/` and pretrained models from `./
 ├── configs
 ├── data
 │   ├── coco
-│   │   ├── annotations
-│   │   └── ...
+│   │   ├── panoptic_train2017
+│   │   ├── panoptic_val2017
+│   │   ├── train2017
+│   │   └── val2017
 │   └── psg
 │       ├── psg_train_val.json
 │       ├── psg_val_test.json
