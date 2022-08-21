@@ -59,6 +59,7 @@
 ---
 
 ## Updates
+- **Aug 21, 2022**: We provide guidance on PSG challenge registration [here](https://github.com/Jingkang50/OpenPSG/blob/main/psg_challenge.md).
 - **Aug 12, 2022**: Replicate demo and Cloud API is added, try it [here](https://replicate.com/cjwbw/openpsg)!
 - **Aug 10, 2022**: We launched [Hugging Face demo 🤗](https://huggingface.co/spaces/mmlab-ntu/OpenPSG). Try it with your scene!
 - **Aug 5, 2022**: The PSG Challenge will be available on [International Algorithm Case Competition ](https://iacc.pazhoulab-huangpu.com/)! All the data will be available there then! Stay tuned!
