@@ -1,4 +1,4 @@
-# How to register and join the PSG competition (English)
+# How to register and join the PSG competition (for non-Chinese Players)
 
 ## Step 1: Open the official competition link
 https://www.cvmart.net/race/10349/base 
