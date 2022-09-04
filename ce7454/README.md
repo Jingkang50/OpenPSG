@@ -5,7 +5,7 @@
 We specially build the tiny codebase here (in this directory) to help our students to quickly get started.
 
 First off, let's clone or fork the codebase and enter in the `ce7454` directory. Don't forget to star the repo if you find the assignment is interesting and instructive.
-Then we download the data [here](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/El0TuNPJWyVJqw6agAzd7l0BU_Tr9gJEgUzLbZggaAKyHg?e=cFPqNF) and unzip the data at the correct place. Eventually, your `ce7454` folder should looks like this:
+Then we download the data [here](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EpU1E9PvC1RNrrhrubGs8gMBGy5ayyfPo6I8HcA5BU7g2Q?e=cJjmgy) and unzip the data at the correct place. Eventually, your `ce7454` folder should looks like this:
 ```
 ce7454
 ├── checkpoints
