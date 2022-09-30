@@ -18,7 +18,6 @@ from mmdet.datasets import build_dataloader, replace_ImageToTensor
 from mmdet.models import build_detector
 
 from openpsg.datasets import build_dataset
-from grade import save_results
 
 
 def parse_args():
@@ -247,8 +246,10 @@ def main():
             metric_sgdet = dataset.evaluate(outputs, **eval_kwargs)
             eval_kwargs['metric'] = 'PQ'
             metric_pq = dataset.evaluate(outputs, **eval_kwargs)
-            print('Recall R 20: {}\n'.format(metric_sgdet['sgdet_recall_R_20']))
-            print('MeanRecall R 20: {}\n'.format(metric_sgdet['sgdet_mean_recall_mR_20']))
+            print('Recall R 20: {}\n'.format(
+                metric_sgdet['sgdet_recall_R_20']))
+            print('MeanRecall R 20: {}\n'.format(
+                metric_sgdet['sgdet_mean_recall_mR_20']))
             print('PQ: {}\n'.format(0.01 * metric_pq['PQ']))
             print('Inference Time: {}\n'.format(mean_duration))
             if mean_duration <= 0.05:
@@ -264,11 +265,10 @@ def main():
             else:
                 time_score = 0.0
             print('Final Score: {}\n'.format(
-                metric_sgdet['sgdet_recall_R_20'] * 0.25 + 
-                metric_sgdet['sgdet_mean_recall_mR_20'] * 0.55 + 
-                metric_pq['PQ'] * 0.01 * 0.1 +
-                time_score * 0.1
-            ))
+                metric_sgdet['sgdet_recall_R_20'] * 0.25 +
+                metric_sgdet['sgdet_mean_recall_mR_20'] * 0.55 +
+                metric_pq['PQ'] * 0.01 * 0.1 + time_score * 0.1))
+
 
 if __name__ == '__main__':
     main()
