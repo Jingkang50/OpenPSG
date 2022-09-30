@@ -204,8 +204,13 @@ def main():
 
     if not distributed:
         model = MMDataParallel(model, device_ids=[0])
+        start_time = time.time()
         outputs = single_gpu_test(model, data_loader, args.show, args.show_dir,
                                   args.show_score_thr)
+        duration = time.time() - start_time
+        mean_duration = duration / len(data_loader)
+        print('\n inference time:', flush=True)
+        print(mean_duration, flush=True)
     else:
         model = MMDistributedDataParallel(
             model.cuda(),
@@ -238,7 +243,32 @@ def main():
             metric_dict = dict(config=args.config, metric=metric)
             if args.work_dir is not None and rank == 0:
                 mmcv.dump(metric_dict, json_file)
-
+            eval_kwargs['metric'] = 'sgdet'
+            metric_sgdet = dataset.evaluate(outputs, **eval_kwargs)
+            eval_kwargs['metric'] = 'PQ'
+            metric_pq = dataset.evaluate(outputs, **eval_kwargs)
+            print('Recall R 20: {}\n'.format(metric_sgdet['sgdet_recall_R_20']))
+            print('MeanRecall R 20: {}\n'.format(metric_sgdet['sgdet_mean_recall_mR_20']))
+            print('PQ: {}\n'.format(0.01 * metric_pq['PQ']))
+            print('Inference Time: {}\n'.format(mean_duration))
+            if mean_duration <= 0.05:
+                time_score = 1.0
+            elif 0.05 < mean_duration <= 0.1:
+                time_score = 0.8
+            elif 0.1 < mean_duration <= 0.5:
+                time_score = 0.6
+            elif 0.5 < mean_duration <= 1.0:
+                time_score = 0.4
+            elif 1.0 < mean_duration <= 10.0:
+                time_score = 0.2
+            else:
+                time_score = 0.0
+            print('Final Score: {}\n'.format(
+                metric_sgdet['sgdet_recall_R_20'] * 0.25 + 
+                metric_sgdet['sgdet_mean_recall_mR_20'] * 0.55 + 
+                metric_pq['PQ'] * 0.01 * 0.1 +
+                time_score * 0.1
+            ))
 
 if __name__ == '__main__':
     main()

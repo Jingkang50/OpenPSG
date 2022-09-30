@@ -146,6 +146,7 @@ dmypy.json
 # not track captioning
 *.json
 tools/custom_tools
+tools/contest_data
 scripts/_depreciated
 # configs/detseg
 
