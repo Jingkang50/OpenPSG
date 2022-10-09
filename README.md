@@ -59,6 +59,7 @@
 ---
 
 ## Updates
+- **Oct 9, 2022**: The preliminary round of PSG challenge ends. We will release the entire dataset after the final round starts. Before that, if you want to access the PSG dataset, please [email](mailto:jingkang001@e.ntu.edu.sg) me.
 - **Sep 4, 2022**: We introduce the PSG Classification Task for NTU CE7454 Coursework, as described [here](https://github.com/Jingkang50/OpenPSG/blob/main/ce7454).
 - **Aug 21, 2022**: We provide guidance on PSG challenge registration [here](https://github.com/Jingkang50/OpenPSG/blob/main/psg_challenge.md).
 - **Aug 12, 2022**: Replicate demo and Cloud API is added, try it [here](https://replicate.com/cjwbw/openpsg)!
