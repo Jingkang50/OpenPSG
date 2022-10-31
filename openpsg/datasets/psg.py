@@ -76,10 +76,11 @@ class PanopticSceneGraphDataset(CocoPanopticDataset):
             for r in d['relations']:
                 r[2] += 1
 
-        # NOTE: Filter out images with zero relations
-        # dataset['data'] = [
-        #     d for d in dataset['data'] if len(d['relations']) != 0
-        # ]
+        # NOTE: Filter out images with zero relations. 
+        # Comment out this part for competition files
+        dataset['data'] = [
+            d for d in dataset['data'] if len(d['relations']) != 0
+        ]
 
         # Get split
         assert split in {'train', 'test'}
