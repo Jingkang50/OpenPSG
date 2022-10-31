@@ -14,7 +14,7 @@
     <img src="https://img.shields.io/badge/Page-psgdataset.org-228c22?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
-  <a href="https://www.cvmart.net/race/10349/dataset" target='_blank'>
+  <a href="https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBDAb7v0UgI8iIAExQUJq62Q?e=fIY3zh" target='_blank'>
     <img src="https://img.shields.io/badge/Data-PSGDataset-334b7f?style=flat-square">
   </a>
   &nbsp;&nbsp;&nbsp;
@@ -59,6 +59,7 @@
 ---
 
 ## Updates
+- **Oct 31, 2022**: We release the full dataset [here](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBDAb7v0UgI8iIAExQUJq62Q?e=fIY3zh) that we used in the paper. The competition version is [here](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/Es2o9zfHvD5Fh0MoI9EB6UUBPAsPFEdZtqjA6RWxncUDgA?e=5swsAx).
 - **Oct 9, 2022**: The preliminary round of PSG challenge ends. We will release the entire dataset after the final round starts. Before that, if you want to access the PSG dataset (competition version), please [email](mailto:jingkang001@e.ntu.edu.sg) me.
 - **Sep 4, 2022**: We introduce the PSG Classification Task for NTU CE7454 Coursework, as described [here](https://github.com/Jingkang50/OpenPSG/blob/main/ce7454).
 - **Aug 21, 2022**: We provide guidance on PSG challenge registration [here](https://github.com/Jingkang50/OpenPSG/blob/main/psg_challenge.md).
@@ -153,7 +154,7 @@ pip install -v -e .
 # thus any local modifications made to the code will take effect without reinstallation.
 ```
 
-[Datasets](https://www.cvmart.net/race/10349/dataset) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
+[Datasets](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EgQzvsYo3t9BpxgMZ6VHaEMBDAb7v0UgI8iIAExQUJq62Q?e=fIY3zh) and [pretrained models](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/ErQ4stbMxp1NqP8MF8YPFG8BG-mt5geOrrJfAkeitjzASw?e=9taAaU) are provided. Please unzip the files if necessary.
 
 **Before October 2022, we only release part of the PSG data for competition, where part of the test set annotations are wiped out. Users should change the `json` filename in [`psg.py` (Line 4-5)](https://github.com/Jingkang50/OpenPSG/blob/d66dfa70429001ad80c2a8984be9d86a9da703bc/configs/_base_/datasets/psg.py#L4) to a correct filename for training or submission.**
 
