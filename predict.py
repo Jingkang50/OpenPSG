@@ -54,3 +54,40 @@ class Predictor(BasePredictor):
         shutil.rmtree(out_dir)
 
         return output
+
+    def predict_verbose(
+        self,
+        image: Path = Input(
+            description="Input image.",
+        ),
+        num_rel: int = Input(
+            description="Number of Relations. Each relation will generate a scene graph",
+            default=5,
+            ge=1,
+            le=20,
+        ),
+    ) -> List[ModelOutput]:
+        input_image = mmcv.imread(str(image))
+        result = inference_detector(self.model, input_image)
+        out_path = Path(tempfile.mkdtemp()) / "output.png"
+        out_dir = "temp"
+        shutil.rmtree(out_dir)
+        os.makedirs(out_dir, exist_ok=True)
+        show_result(
+            str(image),
+            result,
+            is_one_stage=True,
+            num_rel=num_rel,
+            out_dir=out_dir,
+            out_file=str(out_path),
+        )
+        output = []
+        output.append(ModelOutput(image=out_path))
+        for i, img_path in enumerate(os.listdir(out_dir)):
+            img = mmcv.imread(os.path.join(out_dir, img_path))
+            out_path = Path(tempfile.mkdtemp()) / f"output_{i}.png"
+            mmcv.imwrite(img, str(out_path))
+            output.append(ModelOutput(image=out_path))
+        # shutil.rmtree(out_dir)
+
+        return output, result
