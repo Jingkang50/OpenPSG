@@ -16,9 +16,12 @@ class ModelOutput(BaseModel):
 
 class Predictor(BasePredictor):
     def setup(self):
-        model_ckt = "epoch_60.pth"
-        cfg = Config.fromfile("configs/psgtr/psgtr_r50_psg_inference.py")
-        self.model = init_detector(cfg, model_ckt, device="cpu")
+        # model_ckt = "epoch_60.pth"
+        model_ckt = "checkpoints/epoch_60.pth"
+        # model_ckt = "checkpoints/psgtr_r50_psg_epoch_60.pth"
+        cfg = Config.fromfile("configs/psgformer/psgformer_r50_psg_inference.py")
+        # cfg = Config.fromfile("configs/psgtr/psgtr_r50_psg_inference.py")
+        self.model = init_detector(cfg, model_ckt, device="cuda:6")
 
     def predict(
         self,

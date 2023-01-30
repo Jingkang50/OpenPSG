@@ -50,6 +50,7 @@ class LoadSceneGraphAnnotations(LoadAnnotations):
         self.with_rel = with_rel
 
     def _load_rels(self, results):
+        print(results)
         ann_info = results['ann_info']
         results['gt_rels'] = ann_info['rels']
         results['gt_relmaps'] = ann_info['rel_maps']

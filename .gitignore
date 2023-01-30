@@ -153,3 +153,8 @@ ce7454.zip
 ce7454_tools/
 ce7454/checkpoints
 ce7454/results
+
+*.jpg
+*.jpeg
+*.webp
+checkpoints/

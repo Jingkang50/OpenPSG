@@ -285,7 +285,16 @@ def show_result(img,
     #For psgtr
     rel_obj_labels = result.labels
     rel_obj_labels = [CLASSES[l - 1] for l in rel_obj_labels]
+    unq = {}
+    for i, label in enumerate(rel_obj_labels):
+        if label in unq:
+            unq[label] += 1
 
+            label = '_'.join([label,str(unq[label])])
+            rel_obj_labels[i] = label
+        else:
+            unq[label] = 1
+            rel_obj_labels[i] = label + '_1'
     # (N_m, H, W)
     segms = pan_results[None] == ids[:, None, None]
     # Resize predicted masks
