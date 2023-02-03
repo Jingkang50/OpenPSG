@@ -133,7 +133,7 @@ pip install mmcv-full==1.4.3 -f https://download.openmmlab.com/mmcv/dist/cu101/t
 
 # Install mmdet
 pip install openmim
-mim install mmdet=2.20.0
+mim install mmdet==2.20.0
 
 # Install coco panopticapi
 pip install git+https://github.com/cocodataset/panopticapi.git
