@@ -279,4 +279,11 @@ If you find our repository useful for your research, please consider citing our 
     booktitle = {ECCV}
     year = {2022}
 }
+
+@inproceedings{yang2023pvsg,
+    author = {Yang, Jingkang and Peng, Wenxuan and Li, Xiangtai and Guo, Zujin and Chen, Liangyu and Li, Bo and Ma, Zheng and Zhou, Kaiyang and Zhang, Wayne and Loy, Chen Change and Liu, Ziwei},
+    title = {Panoptic Video Scene Graph Generation},
+    booktitle = {CVPR},
+    year = {2023},
+}
 ```
