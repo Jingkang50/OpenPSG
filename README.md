@@ -162,6 +162,9 @@ pip install -v -e .
 
 Our codebase accesses the datasets from `./data/` and pretrained models from `./work_dirs/checkpoints/` by default.
 
+If you want to play with VG, please download the VG dataset [here](https://entuedu-my.sharepoint.com/:f:/g/personal/jingkang001_e_ntu_edu_sg/EiBEV1Z3ueBJqJVO4j7z0YwBt_Jvj2AqYTRsiIs-8pZowg?e=C2O5yg), and put it into `./data` dir.
+We have pipeline [here](https://github.com/Jingkang50/OpenPSG/blob/main/openpsg/datasets/sg.py) to process the dataset.
+
 ```
 ├── ...
 ├── configs
@@ -247,7 +250,7 @@ python tools/test.py \
 
 ### Supported datasets (Welcome to Contribute!)
 
-- [ ] VG-150 (IJCV'17)
+- [x] VG-150 (IJCV'17)
 - [x] PSG (ECCV'22)
 
 
